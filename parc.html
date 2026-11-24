@@ -6,6 +6,19 @@
 <meta name="theme-color" content="#1E4D3B">
 <meta name="description" content="Régisseur – Parc de la Saussaie – aplicație de exploatare și mentenanță sit">
 <title>Régisseur – Parc de la Saussaie</title>
+<link rel="manifest" href="manifest.json"><script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      console.log('[PWA] Service Worker registered:', reg.scope);
+    }).catch(err => {
+      console.warn('[PWA] Service Worker registration failed:', err);
+    });
+  });
+}
+</script>
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
 :root{
   --green:#1E4D3B;
