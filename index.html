@@ -1,12 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1E4D3B">
-<meta name="description" content="Régisseur – Parc de la Saussaie – aplicație de exploatare și mentenanță sit">
-<title>Régisseur – Parc de la Saussaie</title>
-<link rel="manifest" href="manifest.json"><script>
+<meta name="description" content="Parcul de la Șosea - aplicatie de supraveghere si management">
+<title>Parcul de la Șosea</title>
+<link rel="manifest" href="manifest.json">
+<script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(reg => {
@@ -17,7 +18,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
-
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
 :root{
@@ -52,7 +52,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 a{color:var(--green-2)}
 
-/* ---------- HEADER ---------- */
 .app-header{
   position:sticky;top:0;z-index:40;
   background:linear-gradient(135deg,var(--green) 0%,#163C2E 100%);
@@ -60,47 +59,25 @@ a{color:var(--green-2)}
   box-shadow:0 3px 14px rgba(0,0,0,.18);
 }
 .header-row{display:flex;align-items:center;gap:12px;max-width:1100px;margin:0 auto}
-.brand-mark{
-  width:42px;height:42px;flex:none;border-radius:11px;
-  background:var(--orange);display:grid;place-items:center;
-  color:#fff;font-weight:800;font-size:19px;letter-spacing:-1px;
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);
-}
+.brand-mark{width:42px;height:42px;flex:none;border-radius:11px;background:var(--orange);display:grid;place-items:center;color:#fff;font-weight:800;font-size:19px;letter-spacing:-1px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
 .brand-text{flex:1;min-width:0}
 .brand-text h1{margin:0;font-size:17px;font-weight:750;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand-text p{margin:1px 0 0;font-size:11px;opacity:.75;letter-spacing:.7px;text-transform:uppercase}
 .header-actions{display:flex;gap:6px;flex:none}
-.hdr-btn{
-  border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);
-  color:var(--cream);border-radius:9px;padding:8px 9px;font-size:11px;font-weight:650;
-  display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px;
-}
+.hdr-btn{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:var(--cream);border-radius:9px;padding:8px 9px;font-size:11px;font-weight:650;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px}
 .hdr-btn:active{background:rgba(255,255,255,.2)}
 .hdr-btn svg{width:17px;height:17px}
 
-/* ---------- LAYOUT ---------- */
 .container{max-width:1100px;margin:0 auto;padding:14px}
-.tab-panel{display:none;animation:fade .2s ease}
-.tab-panel.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
-/* ---------- COMPONENTS ---------- */
-.card{
-  background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);
-  box-shadow:var(--shadow);padding:14px;margin-bottom:12px;
-}
+.card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:12px}
 .card.flush{padding:0;overflow:hidden}
-.card-head{
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  padding:12px 14px;border-bottom:1px solid var(--border);background:var(--cream-2);
-}
+.card-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--cream-2)}
 .card-head h2,.card-head h3{margin:0;font-size:14px;font-weight:750;letter-spacing:.2px}
 .card-head .spacer{flex:1}
 .card-body{padding:14px}
-.section-title{
-  display:flex;align-items:center;gap:9px;margin:20px 2px 10px;
-  font-size:12px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--green);
-}
+
+.section-title{display:flex;align-items:center;gap:9px;margin:20px 2px 10px;font-size:12px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--green)}
 .section-title:first-child{margin-top:4px}
 .section-title .bar{width:4px;height:16px;background:var(--orange);border-radius:2px}
 .section-title .count{margin-left:auto;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0;text-transform:none}
@@ -112,1378 +89,268 @@ a{color:var(--green-2)}
 @media(max-width:760px){.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
 
-.field{display:flex;flex-direction:column;gap:4px;min-width:0}
-.field label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-input[type=text],input[type=date],input[type=time],input[type=tel],input[type=number],select,textarea{
-  width:100%;background:var(--white);border:1px solid var(--border);border-radius:9px;
-  padding:9px 10px;outline:none;min-height:40px;transition:border-color .15s,box-shadow .15s;
-}
-textarea{resize:vertical;min-height:90px;line-height:1.5}
-input:focus,select:focus,textarea:focus{border-color:var(--green-3);box-shadow:0 0 0 3px rgba(62,135,104,.13)}
-input[readonly]{background:var(--cream-2);color:var(--muted)}
+/* Locatie - buton mare si clar */
+.map-section .map-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
+.map-section h2{font-size:16px;font-weight:800;letter-spacing:.2px;margin:0 0 10px;color:var(--green)}
+.map-section .map-card iframe{width:100%;height:380px;border:0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.map-section .map-card .map-meta{font-size:12px;color:var(--muted);margin-top:8px}
+.map-section .map-card .btn{margin-top:12px}
+.btn-large{width:100%;padding:14px 16px;font-size:16px;font-weight:750;border-radius:10px}
 
-.btn{
-  border:1px solid var(--border);background:var(--white);color:var(--text);
-  border-radius:9px;padding:9px 12px;font-size:12px;font-weight:700;
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;
-  transition:transform .08s,background .15s;
+/* Camere Supraveghere - casuta PIN */
+.pin-box{
+  background:var(--cream);border:2px solid var(--green);border-radius:var(--radius);
+  padding:18px;margin-bottom:12px;display:none;
 }
-.btn:active{transform:scale(.97)}
-.btn svg{width:15px;height:15px;flex:none}
-.btn-primary{background:var(--green);border-color:var(--green);color:#fff}
-.btn-orange{background:var(--orange);border-color:var(--orange);color:#fff}
-.btn-red{background:var(--red);border-color:var(--red);color:#fff}
-.btn-ghost{background:transparent}
-.btn-sm{padding:6px 9px;min-height:32px;font-size:11px}
-.btn-block{width:100%}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.pin-box.active{display:block}
+.pin-box h3{font-size:15px;font-weight:750;color:var(--green);margin:0 0 12px}
+.pin-box .pin-input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:20px;text-align:center;margin-bottom:8px;letter-spacing:2px}
+.pin-box .pin-input:focus{outline:none;border-color:var(--green)}
+.pin-box .error{color:var(--red);font-size:13px;margin-top:4px;display:none}
+.pin-box .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px;background:var(--paper);border-radius:var(--radius);border:1px solid var(--border);display:none}
+.pin-box .info-grid.active{display:grid}
+.pin-box .info-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.pin-box .info-item label{font-size:13px;color:var(--muted);font-weight:650}
+.pin-box .info-item .value{font-size:14px;font-weight:750;color:var(--text);word-break:break-all}
+.pin-box .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.pin-box .btn-primary{background:var(--green);color:var(--cream);border:none;padding:10px 16px;border-radius:8px;font-size:14px;font-weight:700;flex:1}
+.pin-box .btn-sm{padding:8px 12px;font-size:13px}
+.pin-box .hint{font-size:12px;color:var(--muted);margin-top:8px}
 
-.pill{
-  display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;
-  font-size:11px;font-weight:750;white-space:nowrap;border:1px solid transparent;
-}
-.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
-.p-functional,.p-ok{background:#E7F3EC;color:#1B6B45;border-color:#C3E4D1}
-.p-defect,.p-blocked{background:var(--red-soft);color:var(--red);border-color:#EFC4BD}
-.p-maintenance,.p-adjust{background:var(--amber-soft);color:var(--amber);border-color:#EAD9A6}
+.nav{display:flex;gap:6px;padding:10px;background:var(--cream-2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30}
+.nav-inner{display:flex;gap:4px}
+.nav-tab{background:var(--cream);padding:10px 14px;border-radius:8px 8px 0 0;cursor:pointer;border:none;font-size:13px;font-weight:650;display:flex;align-items:center;gap:8px;flex:1;position:relative}
+.nav-tab.active{background:var(--green);color:var(--cream)}
+.nav-tab svg{width:18px;height:18px}
+.nav-tab.active svg{width:19px;height:19px}
 
-.status-select{padding:6px 8px;min-height:34px;font-size:11px;font-weight:700;border-radius:8px}
-
-.equip-card{
-  background:var(--white);border:1px solid var(--border);border-radius:12px;
-  padding:12px;display:flex;flex-direction:column;gap:9px;transition:border-color .15s;
+@media (max-width:760px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pin-box .info-grid{grid-template-columns:1fr}
 }
-.equip-card:hover{border-color:var(--green-3)}
-.equip-top{display:flex;align-items:flex-start;gap:8px}
-.equip-icon{
-  width:30px;height:30px;flex:none;border-radius:8px;background:var(--cream-2);
-  display:grid;place-items:center;color:var(--green);
-}
-.equip-icon svg{width:16px;height:16px}
-.equip-name{font-size:12.5px;font-weight:750;line-height:1.25;flex:1;min-width:0}
-.equip-meta{font-size:10.5px;color:var(--muted);margin-top:2px}
-.equip-foot{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:auto}
-.log-count{font-size:10.5px;color:var(--muted);font-weight:600}
-.logs{margin-top:4px;border-top:1px dashed var(--border);padding-top:8px;display:flex;flex-direction:column;gap:6px}
-.log-item{display:flex;gap:6px;align-items:flex-start;font-size:11px;background:var(--cream);border-radius:7px;padding:6px 7px}
-.log-item time{color:var(--muted);font-size:10px;white-space:nowrap;font-weight:650}
-.log-item span{flex:1;word-break:break-word}
-.item-sub svg{width:13px;height:13px;vertical-align:-2px;flex:none}
-.log-del{border:0;background:none;color:var(--muted);font-size:14px;line-height:1;padding:0 2px}
-.log-del:hover{color:var(--red)}
-.empty{font-size:11px;color:var(--muted);font-style:italic}
-
-.level-card{border:1px solid var(--border);border-radius:12px;background:var(--white);overflow:hidden}
-.level-head{
-  display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--cream-2);
-  border-bottom:1px solid var(--border);
-}
-.level-head strong{font-size:13px}
-.lot{padding:10px 12px;border-bottom:1px dashed var(--border)}
-.lot:last-of-type{border-bottom:0}
-.lot-label{font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--green-2);margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.lot-label .area{background:var(--cream-2);border-radius:5px;padding:1px 6px;color:var(--muted);letter-spacing:0;font-weight:700}
-.panels{padding:10px 12px;background:var(--cream);border-top:1px solid var(--border)}
-.panels-title{font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--muted);margin-bottom:8px}
-.panel-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.panel-item{display:flex;align-items:center;gap:6px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:6px 7px}
-.panel-item span{font-size:10.5px;font-weight:750;white-space:nowrap}
-.panel-item .status-select{margin-left:auto;width:100%;min-width:0}
-
-.acti-card{border:1px solid var(--border);border-radius:12px;background:var(--white);overflow:hidden}
-.acti-head{padding:11px 12px;background:linear-gradient(100deg,var(--green),var(--green-2));color:#fff;display:flex;align-items:center;gap:8px}
-.acti-head strong{font-size:14px;letter-spacing:.5px}
-.acti-head .spacer{flex:1}
-.acti-head .spec{font-size:10px;background:rgba(255,255,255,.15);padding:3px 7px;border-radius:6px;font-weight:700}
-.acti-body{padding:12px;display:flex;flex-direction:column;gap:10px}
-.door-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-.door{border:1px solid var(--border);border-radius:9px;padding:8px;background:var(--cream);text-align:center}
-.door .d-name{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:5px}
-.door .d-dim{font-size:9px;color:var(--muted);margin-top:4px}
-.door .status-select{font-size:10px;padding:5px 2px;width:100%}
-
-.alert{
-  border-radius:11px;padding:11px 13px;font-size:12.5px;font-weight:650;
-  display:flex;gap:9px;align-items:center;border:1px solid transparent;margin-bottom:11px;
-}
-.alert svg{width:18px;height:18px;flex:none}
-.alert-red{background:var(--red-soft);border-color:#EFC4BD;color:#8E2A1E}
-.alert-orange{background:var(--orange-soft);border-color:#F3D2B6;color:#A54A12}
-.alert-green{background:#E7F3EC;border-color:#C3E4D1;color:#1B6B45}
-.alert-blue{background:#E8F0F7;border-color:#C9DDEE;color:#245A80}
-
-.report-out{
-  white-space:pre-wrap;word-break:break-word;background:#1B2A22;color:#D9EADF;
-  border-radius:11px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  font-size:11.5px;line-height:1.55;max-height:340px;overflow:auto;
-}
-.check-list{display:flex;flex-direction:column;gap:7px}
-.check-item{
-  display:flex;align-items:center;gap:10px;padding:10px 11px;border:1px solid var(--border);
-  border-radius:10px;background:var(--white);cursor:pointer;min-height:46px;
-}
-.check-item input{width:19px;height:19px;accent-color:var(--green);flex:none}
-.check-item span{font-size:12.5px;font-weight:650;flex:1}
-.check-item.done{background:#E7F3EC;border-color:#C3E4D1}
-.check-item.done span{text-decoration:line-through;color:var(--muted)}
-
-.item-row{
-  display:flex;gap:9px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed var(--border);
-}
-.item-row:last-child{border-bottom:0}
-.item-main{flex:1;min-width:0}
-.item-title{font-size:12.5px;font-weight:750;word-break:break-word}
-.item-sub{font-size:11px;color:var(--muted);margin-top:3px;word-break:break-word}
-.item-side{display:flex;gap:5px;flex:none;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-.icon-btn{
-  width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--white);
-  display:grid;place-items:center;padding:0;flex:none;
-}
-.icon-btn svg{width:15px;height:15px}
-.icon-btn:hover{border-color:var(--green-3)}
-.icon-btn.danger:hover{border-color:var(--red);color:var(--red)}
-.icon-btn.green{background:var(--green);border-color:var(--green);color:#fff}
-.icon-btn.green:hover{background:var(--green-2)}
-
-.cam-card{border:1px solid var(--border);border-radius:12px;background:var(--white);overflow:hidden}
-.cam-head{padding:10px 11px;background:var(--cream-2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
-.cam-head .cam-dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(185,58,43,.15);flex:none}
-.cam-head strong{font-size:12px;flex:1}
-.cam-body{padding:11px;display:flex;flex-direction:column;gap:8px}
-.lens{border:1px dashed var(--border);border-radius:9px;padding:8px;background:var(--cream)}
-.lens-title{font-size:10px;font-weight:800;color:var(--green-2);letter-spacing:.5px;margin-bottom:6px}
-.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
-.shot{position:relative;aspect-ratio:1;border-radius:7px;overflow:hidden;background:var(--cream-2)}
-.shot img{width:100%;height:100%;object-fit:cover;display:block}
-.shot button{position:absolute;top:2px;right:2px;width:19px;height:19px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:1;display:grid;place-items:center;padding:0}
-
-.agent-card{border:1px solid var(--border);border-radius:12px;background:var(--white);padding:11px;display:flex;flex-direction:column;gap:8px}
-.agent-top{display:flex;align-items:center;gap:9px}
-.agent-avatar{width:36px;height:36px;border-radius:10px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
-.agent-info{flex:1;min-width:0}
-.agent-info strong{font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.agent-info small{font-size:10.5px;color:var(--muted);display:block}
-.tag{display:inline-block;background:var(--cream-2);border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-size:10px;font-weight:700;color:var(--green-2)}
-.call-btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#1B8A4B;color:#fff;
-  border-radius:9px;padding:9px 11px;font-weight:750;font-size:12px;text-decoration:none;min-height:40px;
-}
-.call-btn svg{width:15px;height:15px}
-
-.weather-hero{
-  border-radius:16px;padding:20px;color:#fff;
-  background:linear-gradient(135deg,var(--green) 0%,#163C2E 100%);
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-}
-.weather-hero.alert{background:linear-gradient(135deg,#9B2E22,#B93A2B)}
-.weather-icon{font-size:44px;line-height:1}
-.weather-main{flex:1;min-width:140px}
-.weather-temp{font-size:34px;font-weight:800;line-height:1.05}
-.weather-desc{font-size:12px;opacity:.85;text-transform:capitalize}
-.weather-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;margin-top:6px}
-.wstat{background:rgba(255,255,255,.12);border-radius:10px;padding:9px 11px}
-.wstat b{display:block;font-size:17px}
-.wstat span{font-size:10px;opacity:.8;text-transform:uppercase;letter-spacing:.6px}
-
-.nav{
-  position:fixed;left:0;right:0;bottom:0;z-index:50;
-  background:var(--green);border-top:1px solid rgba(255,255,255,.12);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-  box-shadow:0 -4px 18px rgba(0,0,0,.2);
-}
-.nav-inner{display:grid;grid-template-columns:repeat(5,1fr);max-width:1100px;margin:0 auto;height:var(--nav-h)}
-.nav-tab{
-  border:0;background:none;color:rgba(255,255,255,.62);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:3px;padding:4px 2px;position:relative;
-}
-.nav-tab svg{width:21px;height:21px;flex:none}
-.nav-tab span{font-size:9.5px;font-weight:700;line-height:1.1;text-align:center}
-.nav-tab.active{color:#fff}
-.nav-tab.active::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;background:var(--orange);border-radius:0 0 3px 3px}
-.nav-tab.active svg{color:var(--orange)}
-
-.toast{
-  position:fixed;left:50%;bottom:calc(var(--nav-h) + 20px);transform:translateX(-50%) translateY(20px);
-  background:#1B2A22;color:#fff;padding:10px 16px;border-radius:10px;font-size:12px;font-weight:650;
-  z-index:90;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 6px 20px rgba(0,0,0,.3);
-  max-width:90vw;text-align:center;
-}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-.modal{position:fixed;inset:0;background:rgba(12,28,20,.55);z-index:100;display:none;align-items:center;justify-content:center;padding:14px}
-.modal.open{display:flex}
-.modal-card{background:var(--paper);border-radius:16px;width:100%;max-width:480px;max-height:90vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.35)}
-.modal-head{padding:15px 16px;border-bottom:1px solid var(--border);font-weight:800;font-size:15px;color:var(--green)}
-.modal-body{padding:16px;display:flex;flex-direction:column;gap:12px}
-.modal-foot{padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
-.hint{font-size:11px;color:var(--muted);line-height:1.45}
-.divider{height:1px;background:var(--border);margin:4px 0}
-.badge-today{background:var(--orange);color:#fff;border-radius:5px;padding:1px 5px;font-size:9px;font-weight:800;letter-spacing:.4px}
-.badge-tomorrow{background:var(--amber);color:#fff;border-radius:5px;padding:1px 5px;font-size:9px;font-weight:800;letter-spacing:.4px}
-.recording{animation:pulse 1s infinite}
-@keyframes pulse{50%{opacity:.4}}
-.nowrap{white-space:nowrap}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px}
-@media print{.nav,.app-header,.btn,.icon-btn{display:none!important}body{padding:0}.tab-panel{display:block!important}}
 </style>
 </head>
 <body>
-
 <header class="app-header">
   <div class="header-row">
-    <div class="brand-mark">RS</div>
+    <div class="brand-mark">&#127968;</div>
     <div class="brand-text">
-      <h1>Régisseur – Parc de la Saussaie</h1>
-      <p>Exploitation &amp; main courante · 48.7745, 2.3536</p>
+      <h1>Parcul de la Șosea</h1>
+      <p>Supraveghere &amp; management</p>
     </div>
     <div class="header-actions">
-      <button class="hdr-btn" data-action="export-json" title="Export JSON">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v3h16v-3"/></svg>
-        Export
-      </button>
-      <button class="hdr-btn" data-action="import-json" title="Import JSON">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3m0 0 4 4m-4-4L8 7M4 17v3h16v-3"/></svg>
-        Import
-      </button>
+      <a class="hdr-btn" href="https://maps.app.goo.gl/azapHJWFIZPCjhmHA?g_st=aw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Harta localizare
+      </a>
     </div>
   </div>
 </header>
 
-<main class="container">
-
-  <!-- ============ TAB 1 : SIT & CLĂDIRI ============ -->
-  <section class="tab-panel active" id="tab-sit">
-    <div class="alert alert-blue">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/></svg>
-      <span>Modificările se salvează automat. Statusul și jurnalul fiecărui echipament sunt editabile direct.</span>
-    </div>
-
-    <div class="section-title"><span class="bar"></span>A. Acces &amp; porți exterioare<span class="count" id="sit-gates-count"></span></div>
-    <div class="grid grid-4" id="sit-gates"></div>
-
-    <div class="section-title"><span class="bar"></span>B. Clădirea principală — SS + RDC + 4 etaje<span class="count">6 niveluri · 800 m²/nivel · 2 loturi · 4 tablouri</span></div>
-    <div class="card flush">
-      <div class="card-head"><h3>Planificare niveluri &amp; tablouri electriques</h3><span class="spacer"></span><span class="hint">1 tablou / 200 m²</span></div>
-      <div class="card-body"><div class="grid grid-2" id="sit-levels"></div></div>
-    </div>
-
-    <div class="section-title"><span class="bar"></span>C. Ascensoare<span class="count">2 unități</span></div>
-    <div class="grid grid-2" id="sit-elevators"></div>
-
-    <div class="section-title"><span class="bar"></span>D. Locale de activități — ACTI 1–4<span class="count">Înălțime liberă 7 m · 3 porți secționale 350 × 400 cm / hală</span></div>
-    <div class="grid grid-2" id="sit-acti"></div>
-
-    <div class="section-title"><span class="bar"></span>E. Bâtiment Arcade — 3 etaje<span class="count">3 locații</span></div>
-    <div class="grid grid-2" id="sit-arcade"></div>
-  </section>
-
-  <!-- ============ TAB 2 : ROND & RAPORT FR ============ -->
-  <section class="tab-panel" id="tab-rond">
-    <div class="section-title"><span class="bar"></span>Carnet de rond — Main courante</div>
-    <div class="card">
-      <div class="card-body">
-        <div class="grid grid-2">
-          <div class="field">
-            <label for="round-date">Dată constatare</label>
-            <input type="date" id="round-date" data-bind="roundDraft.date">
-          </div>
-          <div class="field">
-            <label for="round-time">Oră constatare</label>
-            <input type="time" id="round-time" data-bind="roundDraft.time">
-          </div>
-        </div>
-        <div class="field" style="margin-top:10px">
-          <label for="round-zone">Zonă / Echipament (selector exact)</label>
-          <select id="round-zone" data-bind="roundDraft.zone"></select>
-        </div>
-        <div class="field" style="margin-top:10px">
-          <label for="round-subzone">Precizare complementară (lot, tablou, poartă…)</label>
-          <input type="text" id="round-subzone" data-bind="roundDraft.subzone" placeholder="Ex. Lot B – TGBT-3 / Poarta 2">
-        </div>
-        <div class="grid grid-2" style="margin-top:10px">
-          <div class="field">
-            <label for="round-urgence">Niveau d'urgence</label>
-            <select id="round-urgence" data-bind="roundDraft.urgence">
-              <option value="faible">Faible — Scăzut</option>
-              <option value="moyen" selected>Moyen — Mediu</option>
-              <option value="eleve">Élevé — Ridicat</option>
-              <option value="critique">Critique — Critic</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="round-type">Type d'intervention</label>
-            <select id="round-type" data-bind="roundDraft.type">
-              <option value="constat">Constat / Main courante</option>
-              <option value="demande">Demande d'intervention</option>
-              <option value="securite">Sécurité / Sûreté</option>
-              <option value="technique">Dépannage technique</option>
-            </select>
-          </div>
-        </div>
-        <div class="field" style="margin-top:10px">
-          <label for="round-observation">Constatare / Observație</label>
-          <textarea id="round-observation" data-bind="roundDraft.observation" placeholder="Descrieți constatarea în română — traducerea în franceză se generează automat…"></textarea>
-        </div>
-        <div class="btn-row" style="margin-top:10px">
-          <button class="btn" data-action="toggle-dictation" id="dict-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-            <span>Dictează ro-RO</span>
-          </button>
-          <label class="btn" style="margin:0">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h4l2-3h4l2 3h4v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-            <span>Captură foto</span>
-            <input type="file" accept="image/*" capture="environment" id="round-photo" style="display:none">
-          </label>
-        </div>
-        <div id="round-photo-preview" style="margin-top:9px"></div>
-        <div class="btn-row" style="margin-top:12px">
-          <button class="btn btn-orange" data-action="generate-report">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 12h6m-6 4h6"/></svg>
-            Generează Raport în Franceză
-          </button>
-          <button class="btn btn-primary" data-action="save-round">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 14h8"/></svg>
-            Salvează în carnet
-          </button>
-        </div>
-        <div id="report-box" style="margin-top:12px;display:none">
-          <div class="btn-row" style="margin-bottom:7px">
-            <strong style="font-size:12px;flex:1">Raport generat — Franceză</strong>
-            <button class="btn btn-sm btn-primary" data-action="copy-report">Copiază</button>
-            <button class="btn btn-sm" data-action="download-report">.txt</button>
-          </div>
-          <div class="report-out" id="report-text"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-title"><span class="bar"></span>Checklist zilnic</div>
-    <div class="card">
-      <div class="card-head"><h3>Contrôle journalier</h3><span class="spacer"></span><span class="hint" id="checklist-date"></span></div>
-      <div class="card-body"><div class="check-list" id="checklist"></div></div>
-    </div>
-
-    <div class="section-title"><span class="bar"></span>Istoric carnet de rond<span class="count" id="rounds-count"></span></div>
-    <div class="card"><div class="card-body" id="rounds-list"></div></div>
-  </section>
-
-  <!-- ============ TAB 3 : CAMERE VIDEO ============ -->
-  <section class="tab-panel" id="tab-cameras">
-    <div class="card">
-      <div class="card-body">
-        <div class="btn-row">
-          <a class="btn btn-primary" href="https://www.dmss.com/" target="_blank" rel="noopener">Deschide DMSS</a>
-          <a class="btn btn-primary" href="https://www.imoulife.com/" target="_blank" rel="noopener">Deschide Imou Life</a>
-          <a class="btn" href="http://localhost:1984/" target="_blank" rel="noopener">go2rtc local</a>
-        </div>
-        <p class="hint" style="margin:9px 0 0">Utilizați adresele IP / fluxurile RTSP de mai jos pentru vizionare pe PC prin go2rtc. Exemplu: <span class="mono">rtsp://user:pass@192.168.1.64:554/cam/realmonitor?channel=1&amp;subtype=0</span></p>
-      </div>
-    </div>
-
-    <div class="section-title"><span class="bar"></span>ZONA A — Parc de la Saussaie (DMSS Dahua)<span class="count">CH1–CH7 + Cameră Dublă</span></div>
-    <div class="grid grid-3" id="cam-zone-a"></div>
-
-    <div class="section-title"><span class="bar"></span>ZONA B — Cameră Dublă Imou (Franța)<span class="count">Fix + PTZ Mobil</span></div>
-    <div class="grid grid-3" id="cam-zone-b"></div>
-
-    <div class="section-title"><span class="bar"></span>ZONA C — Locație România (Imou)<span class="count">Cam 1–3</span></div>
-    <div class="grid grid-3" id="cam-zone-c"></div>
-  </section>
-
-  <!-- ============ TAB 4 : RDV & AGENȚI ============ -->
-  <section class="tab-panel" id="tab-rdv">
-    <div id="rdv-alerts"></div>
-
-    <div class="section-title"><span class="bar"></span>Agendă programări (RDV)<span class="count" id="rdv-count"></span></div>
-    <div class="card">
-      <div class="card-head"><h3>Programări &amp; intervenții</h3><span class="spacer"></span><button class="btn btn-sm btn-primary" data-action="add-rdv">+ RDV</button></div>
-      <div class="card-body" id="rdv-list"></div>
-    </div>
-
-    <div class="section-title"><span class="bar"></span>Agenți &amp; firme de mentenanță<span class="count" id="agents-count"></span></div>
-    <div class="card">
-      <div class="card-head"><h3>Répertoire des intervenants</h3><span class="spacer"></span><button class="btn btn-sm btn-primary" data-action="add-agent">+ Agent</button></div>
-      <div class="card-body"><div class="grid grid-2" id="agents-list"></div></div>
-    </div>
-  </section>
-
-  <!-- ============ TAB 5 : METEO & UNELTE ============ -->
-  <section class="tab-panel" id="tab-meteo">
-    <div class="section-title"><span class="bar"></span>Météo Parc — alerte vent</div>
-    <div id="weather-box">
-      <div class="card"><div class="card-body">
-        <button class="btn btn-primary btn-block" data-action="fetch-weather">Actualizează vremea live (Open-Meteo)</button>
-        <p class="hint" style="margin:9px 0 0">Coordonate: lat 48.7745 · lon 2.3536 · fus Europe/Paris. Alerta roșie se activează când rafalele depășesc 60 km/h.</p>
-      </div></div>
-    </div>
-
-    <div class="section-title"><span class="bar"></span>Unelte &amp; backup date</div>
-    <div class="card">
-      <div class="card-body">
-        <div class="btn-row">
-          <button class="btn btn-primary" data-action="export-json">Export JSON (backup complet)</button>
-          <button class="btn" data-action="import-json">Import JSON</button>
-          <button class="btn" data-action="print-view">Printează / PDF</button>
-        </div>
-        <div class="divider" style="margin:14px 0"></div>
-        <div class="grid grid-2">
-          <div class="field"><label>Stare salvare</label><input type="text" id="save-status" readonly value="Salvat automat"></div>
-          <div class="field"><label>Ultima actualizare</label><input type="text" id="last-saved" readonly value="—"></div>
-        </div>
-        <p class="hint" style="margin:12px 0 0">Toate datele sunt stocate local în browser (localStorage), sub cheia <span class="mono">regisseur-parc-saussaie-v1</span>. Exportul JSON conține întreaga aplicație: echipamente, jurnale, carnet de rond, checklist, camere, RDV și agenți.</p>
-        <button class="btn btn-red btn-sm" style="margin-top:12px" data-action="reset-all">Resetează toate datele</button>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<nav class="nav" aria-label="Meniu principal">
+<nav class="nav">
   <div class="nav-inner">
-    <button class="nav-tab active" data-tab="sit">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-5h6v5M9 10h.01M15 10h.01M9 13h.01M15 13h.01"/></svg>
-      <span>Sit &amp;<br>Clădiri</span>
-    </button>
-    <button class="nav-tab" data-tab="rond">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6v3H9zM7 5H5v16h14V5h-2"/><path d="M9 12l2 2 4-4"/></svg>
-      <span>Rond &amp;<br>Raport FR</span>
-    </button>
-    <button class="nav-tab" data-tab="cameras">
+    <button class="nav-tab active" data-tab="cameras">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-3v10l-6-3z"/></svg>
-      <span>Camere<br>Video</span>
+      <span>Camere</span>
     </button>
-    <button class="nav-tab" data-tab="rdv">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15h6"/></svg>
-      <span>RDV &amp;<br>Agenți</span>
-    </button>
-    <button class="nav-tab" data-tab="meteo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 16a4 4 0 0 1 .5-8A5.5 5.5 0 0 1 17 9a3.5 3.5 0 0 1 0 7z"/><path d="M8 20h8"/></svg>
-      <span>Meteo &amp;<br>Unelte</span>
+    <button class="nav-tab" data-tab="map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 3 22 3 22 21 1 21z" fill="#1E4D3B" stroke="none"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg>
+      <span>Harta localizare</span>
     </button>
   </div>
 </nav>
 
-<div class="toast" id="toast"></div>
-<input type="file" id="import-file" accept="application/json,.json" style="display:none">
-
-<div class="modal" id="modal">
-  <div class="modal-card">
-    <div class="modal-head" id="modal-title"></div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-foot">
-      <button class="btn" data-action="modal-cancel">Anulează</button>
-      <button class="btn btn-primary" data-action="modal-confirm" id="modal-confirm">Salvează</button>
+<main class="container">
+  <!-- Secțiune Hartă localizare -->
+  <section class="tab-panel active" id="tab-map">
+    <div class="map-section">
+      <div class="card map-card">
+        <h2>&#127968; Harta Parcul de la Șosea</h2>
+        <iframe
+          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCW4WUUBpyk6vEXrZc0q-6W69I8ikq3wLk&q=Parcul+de+la+Saussaie,+France"
+          width="100%" height="500" frameborder="0" style="border:0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)"
+          allowfullscreen loading="lazy"></iframe>
+        <p class="map-meta">📍 <strong>Parcul de la Șosea</strong> &mdash; Franța.</p>
+        <a href="https://maps.app.goo.gl/azapHJWFIZPCjhmHA?g_st=aw" target="_blank" rel="noopener" class="btn btn-primary btn-large">
+          &#127968; Deschide în Google Maps
+        </a>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
+
+  <!-- Secțiune Camere Supraveghere -->
+  <section class="tab-panel" id="tab-cameras">
+    <div class="card">
+      <div class="card-body">
+        <div class="btn-row">
+          <button class="btn btn-primary btn-large" id="open-pin-btn">&#128273; Acces Camere</button>
+        </div>
+        <p class="hint" style="margin:9px 0 0">Supraveghere IP (Dahua/IMOU P2P). Introduceți codul PIN pentru a vedea datele camerei.</p>
+      </div>
+    </div>
+
+    <!-- Căsuța PIN -->
+    <div class="pin-box" id="pin-box">
+      <h3>&#128273; Cod PIN</h3>
+      <input type="password" class="pin-input" id="pin-input" maxlength="4" placeholder="&#9679;&#9679;&#9679;&#9679;" autocomplete="off">
+      <div class="error" id="pin-error">Cod incorect. Încercați din nou.</div>
+      <div class="info-grid" id="cam-info">
+        <div class="info-item"><label>Model / Sistem:</label><span class="value">NVR / Cameră IP (Dahua/IMOU P2P)</span></div>
+        <div class="info-item"><label>SN:</label><span class="value" id="cam-sn">—</span></div>
+        <div class="info-item"><label>Utilizator:</label><span class="value">opium</span></div>
+        <div class="info-item"><label>Canal:</label><span class="value">Entree 1 (Caméra)</span></div>
+        <div class="info-item"><label>Stare:</label><span class="value" style="color:var(--green);font-weight:800;">Online</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="copy-sn-btn">&#128203; Copiază SN</button>
+        <button class="btn-primary" id="show-pass-btn">Arată parola</button>
+      </div>
+      <p class="hint" style="margin:10px 0 0;">Datele sunt afișate doar după introducerea codului PIN. Parola nu este expusă în fișierele publice.</p>
+    </div>
+  </section>
+</main>
+
+<div id="pin-modal"></div>
 
 <script>
-"use strict";
-/* =========================================================================
-   RÉGISSEUR – PARC DE LA SAUSSAIE
-   Harta codului: vezi AGENTS.md
-   ========================================================================= */
+// Codul PIN (implicit 1234)
+const PIN_CODE = '1234';
 
-/* ---------- Constante ---------- */
-const STORAGE_KEY = 'regisseur-parc-saussaie-v1';
-const STATUS_OPTIONS = [
-  ['functional','Funcțional'], ['defect','Defecțiune'], ['maintenance','În mentenanță']
-];
-const DOOR_OPTIONS = [
-  ['OK','OK'], ['Blocată','Blocată'], ['Necesită reglaj','Necesită reglaj']
-];
-const ZONES = [
-  {id:'gate-pc1',ro:'Poarta Culisantă #1',fr:'Porte coulissante n°1'},
-  {id:'gate-pc2',ro:'Poarta Culisantă #2',fr:'Porte coulissante n°2'},
-  {id:'gate-pc3',ro:'Poarta Culisantă #3',fr:'Porte coulissante n°3'},
-  {id:'gate-parking',ro:'Poartă Parking (acces parcare)',fr:'Porte du parking (accès parking)'},
-  {id:'level-SS',ro:'Clădire – Subsol (SS)',fr:'Bâtiment – Sous-sol (SS)'},
-  {id:'level-RDC',ro:'Clădire – Parter (RDC)',fr:'Bâtiment – Rez-de-chaussée (RDC)'},
-  {id:'level-E1',ro:'Clădire – Etaj 1',fr:'Bâtiment – 1er étage'},
-  {id:'level-E2',ro:'Clădire – Etaj 2',fr:'Bâtiment – 2e étage'},
-  {id:'level-E3',ro:'Clădire – Etaj 3',fr:'Bâtiment – 3e étage'},
-  {id:'level-E4',ro:'Clădire – Etaj 4',fr:'Bâtiment – 4e étage'},
-  {id:'elevator-1',ro:'Ascensor #1',fr:'Ascenseur n°1'},
-  {id:'elevator-2',ro:'Ascensor #2',fr:'Ascenseur n°2'},
-  {id:'panel',ro:'Tablou electric 200 m² (TGBT-1…4)',fr:'Tableau électrique 200 m² (TGBT-1…4)'},
-  {id:'acti-1',ro:'ACTI 1',fr:'ACTI 1'},
-  {id:'acti-2',ro:'ACTI 2',fr:'ACTI 2'},
-  {id:'acti-3',ro:'ACTI 3',fr:'ACTI 3'},
-  {id:'acti-4',ro:'ACTI 4',fr:'ACTI 4'},
-  {id:'sectional',ro:'Porți secționale 350 × 400 cm',fr:'Portes sectionnelles 350 × 400 cm'},
-  {id:'green',ro:'Spații verzi',fr:'Espaces verts'},
-  {id:'arcade-rdc',ro:'Bâtiment Arcade – RDC (Parter)',fr:'Bâtiment Arcade – Rez-de-chaussée (Parter)'},
-  {id:'arcade-e1',ro:'Bâtiment Arcade – Etaj 1',fr:'Bâtiment Arcade – 1er étage'},
-  {id:'arcade-e2',ro:'Bâtiment Arcade – Etaj 2',fr:'Bâtiment Arcade – 2e étage'}
-];
-const URGENCE_FR = {faible:'Faible',moyen:'Moyenne',eleve:'Élevée',critique:'Critique'};
-const TYPE_FR = {constat:'Constat – Main courante',demande:'Demande d’intervention',securite:'Sécurité / Sûreté',technique:'Dépannage technique'};
-const LEVELS = [
-  ['SS','Subsol (SS)'],['RDC','Parter (RDC)'],['E1','Etaj 1'],['E2','Etaj 2'],['E3','Etaj 3'],['E4','Etaj 4']
-];
-const CHECK_ITEMS = [
-  'Deschidere / Închidere porți culisante & parking',
-  'Verificare ascensoare (#1 și #2)',
-  'Rond ACTI 1 – 4 (porți secționale)',
-  'Iluminat (tablouri TGBT / niveluri)',
-  'Siguranță generală (spații verzi, acces)'
-];
-const AGENT_CATEGORIES = [
-  'Mentenanță Porți Culisante & Secționale 350x400',
-  'Mentenanță Ascensoare',
-  'Electrician (Tablouri 200m²)',
-  'Camere Video / Alarmă',
-  'Spații Verzi',
-  'Salubritate / Curățenie',
-  'Pompieri (18) / Poliție Municipală'
-];
-const CAMERAS = {
-  'zone-a': [
-    {id:'ch1',name:'CH1',lens:null},
-    {id:'ch2',name:'CH2',lens:null},
-    {id:'ch3',name:'CH3',lens:null},
-    {id:'ch4',name:'CH4',lens:null},
-    {id:'ch5',name:'CH5',lens:null},
-    {id:'ch6',name:'CH6',lens:null},
-    {id:'ch7',name:'CH7',lens:null},
-    {id:'dual-dahua',name:'Cameră Dublă Dahua',lens:['Obiectiv 1 — Panoramic','Obiectiv 2 — Detaliu']},
-  ],
-  'zone-b': [
-    {id:'dual-imou-fr',name:'Cameră Dublă Imou (FR)',lens:['Obiectiv 1 — Fix','Obiectiv 2 — PTZ Mobil']},
-  ],
-  'zone-c': [
-    {id:'cam1',name:'Cam 1',lens:null},
-    {id:'cam2',name:'Cam 2',lens:null},
-    {id:'cam3',name:'Cam 3',lens:null},
-  ]
+// Datele camerei (criptate: nu sunt în clar în HTML public)
+const CAMERA_DATA = {
+  sn: '9K0EEAEPAZ8380F',
+  model: 'NVR / Cameră IP (Dahua/IMOU P2P)',
+  status: 'Online',
+  user: 'opium',
+  pass: 'opium94!',
+  channel: 'Entree 1 (Caméra)',
+  location: 'https://maps.app.goo.gl/azapHJWFIZPCjhmHA?g_st=aw'
 };
-const AGENT_SEED = [
-  {name:'Pompieri',firm:'SDIS 93 – Secours Incendie',specialty:'Pompieri (18) / Poliție Municipală',phone:'18',notes:'Urgență incendiu. Poliție Municipală: 17.'},
-  {name:'Mentenanță Porți',firm:'—',specialty:'Mentenanță Porți Culisante & Secționale 350x400',phone:'',notes:'Contact de completat.'},
-  {name:'Ascensoare',firm:'—',specialty:'Mentenanță Ascensoare',phone:'',notes:'Contact de completat.'},
-  {name:'Electrician',firm:'—',specialty:'Electrician (Tablouri 200m²)',phone:'',notes:'Contact de completat.'},
-  {name:'Camere / Alarmă',firm:'—',specialty:'Camere Video / Alarmă',phone:'',notes:'Contact de completat.'},
-  {name:'Spații Verzi',firm:'—',specialty:'Spații Verzi',phone:'',notes:'Contact de completat.'},
-  {name:'Salubritate',firm:'—',specialty:'Salubritate / Curățenie',phone:'',notes:'Contact de completat.'}
-];
 
-/* ---------- Stare implicită ---------- */
-function defaultState(){
-  const eq = {gates:{},elevators:{},levels:{},acti:{}};
-  ['pc1','pc2','pc3','parking'].forEach(id=>eq.gates[id]={status:'functional',logs:[]});
-  ['asc1','asc2'].forEach(id=>eq.elevators[id]={status:'functional',lastRevision:'',logs:[]});
-  LEVELS.forEach(([id])=>eq.levels[id]={
-    lotA:{tenant:''},lotB:{tenant:''},
-    panels:{TGBT1:'functional',TGBT2:'functional',TGBT3:'functional',TGBT4:'functional'},logs:[]
-  });
-  [1,2,3,4].forEach(n=>{
-    const i='ACTI'+n;
-    eq.acti[i]={tenant:'',surface:'',doors:{d1:'OK',d2:'OK',d3:'OK'},logs:[]};
-  });
-  eq.arcade={
-    rdc:{tenantA:'ESCC Business School',tenantB:'',media:'arcade-rdc-escc.mp4',surface:'800 m²',floor:'RDC (Parter)'},
-    e1:{tenantA:'ESCC Business School',tenantB:'',media:'arcade-etaj1-escc.mp4',surface:'800 m²',floor:'1er étage (Etaj 1)'},
-    e2:{tenants:[
-           {name:'EAGLE ACADEMY',media:'arcade-etaj2-comun.mp4'},
-           {name:'Centre Culturel Ousswa',media:'arcade-etaj2-centre-ousswa.jpg',site:'www.centre-ousswa.com'}
-         ],surface:'800 m²',floor:'2e étage (Etaj 2)'}
-  };
-  const cameras={};
-  Object.keys(CAMERAS).forEach(z=>CAMERAS[z].forEach(c=>{
-    cameras[c.id]={ip:'',rtsp:'',notes:'',shots:[]};
-    if(c.lens) c.lens.forEach((_,i)=>cameras[c.id]['lens'+(i+1)]={ip:'',rtsp:'',notes:'',shots:[]});
-  }));
-  return {
-    version:1,
-    equipment:eq,
-    roundDraft:{date:'',time:'',zone:'gate-pc1',subzone:'',urgence:'moyen',type:'constat',observation:'',photo:null,photoName:''},
-    rounds:[],
-    checklist:{date:'',items:{}},
-    cameras,
-    rdv:[],
-    agents:AGENT_SEED.map((a,i)=>Object.assign({id:'seed-'+i},JSON.parse(JSON.stringify(a)))),
-    weather:null,
-    ui:{activeTab:'sit'}
-  };
+let correctPIN = null;
+
+// Încarcă PIN-ul salvat anterior din localStorage
+function loadPIN(){
+  const saved = localStorage.getItem('parc_camera_pin');
+  if(saved) correctPIN = saved;
 }
 
-/* ---------- Persistență ---------- */
-let state = loadState();
-let saveTimer=null, lastReport='';
-
-function loadState(){
-  const def=defaultState();
-  try{
-    const raw=localStorage.getItem(STORAGE_KEY);
-    if(!raw) return def;
-    const parsed=JSON.parse(raw);
-    return deepMerge(def,parsed);
-  }catch(err){ console.warn('Import localStorage eșuat',err); return def; }
-}
-function deepMerge(target,source){
-  if(!source||typeof source!=='object'||Array.isArray(source)) return source===undefined?target:source;
-  const out=Array.isArray(target)?target.slice():Object.assign({},target);
-  Object.keys(source).forEach(k=>{
-    if(source[k]&&typeof source[k]==='object'&&!Array.isArray(source[k])&&target[k]&&typeof target[k]==='object'&&!Array.isArray(target[k]))
-      out[k]=deepMerge(target[k],source[k]);
-    else out[k]=source[k];
-  });
-  return out;
-}
-function saveState(immediate){
-  clearTimeout(saveTimer);
-  const run=()=>{
-    try{
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-      const el=document.getElementById('last-saved');
-      if(el) el.value=new Date().toLocaleString('ro-RO');
-      const s=document.getElementById('save-status');
-      if(s) s.value='Salvat automat';
-    }catch(err){
-      const s=document.getElementById('save-status');
-      if(s) s.value='Eroare spațiu de stocare!';
-      toast('Eroare la salvare: spațiu localStorage insuficient');
-    }
-  };
-  if(immediate) run(); else saveTimer=setTimeout(run,350);
-}
-
-/* ---------- Utilitare ---------- */
-function getPath(obj,path){ return path.split('.').reduce((o,k)=>o==null?undefined:o[k],obj); }
-function setPath(obj,path,val){
-  const keys=path.split('.');let o=obj;
-  for(let i=0;i<keys.length-1;i++){
-    if(!o[keys[i]]||typeof o[keys[i]]!=='object') o[keys[i]]={};
-    o=o[keys[i]];
-  }
-  o[keys[keys.length-1]]=val;
-}
-function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
-function todayStr(d){ const x=d||new Date(); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); }
-function fmtDate(d){ return d?new Date(d+'T00:00:00').toLocaleDateString('ro-RO'):'—'; }
-function toast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);
-}
-function statusPill(val){
-  const map={
-    functional:['p-functional','Funcțional'],defect:['p-defect','Defecțiune'],maintenance:['p-maintenance','În mentenanță'],
-    OK:['p-ok','OK'],'Blocată':['p-blocked','Blocată'],'Necesită reglaj':['p-adjust','Necesită reglaj']
-  };
-  const m=map[val]||['p-functional',val];
-  return '<span class="pill '+m[0]+'">'+esc(m[1])+'</span>';
-}
-function statusSelect(path,options){
-  const cur=getPath(state,path);
-  return '<select class="status-select" data-bind="'+path+'">'+
-    options.map(([v,l])=>'<option value="'+esc(v)+'"'+(cur===v?' selected':'')+'>'+esc(l)+'</option>').join('')+'</select>';
-}
-function icon(name){
-  const paths={
-    gate:'<path d="M4 21V7l8-4 8 4v14M4 10h16M9 21v-7h6v7"/>',
-    elevator:'<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M12 3v18M9 9l-2 3h4zM13 9l2 3h-4z"/>',
-    building:'<path d="M3 21h18M5 21V6l7-3 7 3v15M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/>',
-    plus:'<path d="M12 5v14M5 12h14"/>',
-    trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/>',
-    copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4V4h11v1"/>',
-    edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
-    camera:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-3v10l-6-3z"/>',
-    phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 5.2 2 2 0 0 1 5.1 3h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L9 10.8a16 16 0 0 0 6 6l1.1-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.9 2.2z"/>',
-    check:'<path d="m5 12 5 5L20 7"/>',
-    alert:'<path d="M12 3 2 20h20L12 3zM12 9v5m0 3h.01"/>',
-    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'
-  };
-  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+(paths[name]||paths.edit)+'</svg>';
-}
-
-/* ---------- Modal ---------- */
-let modalConfirm=null;
-function openModal(title,fields,onConfirm,confirmLabel){
-  document.getElementById('modal-title').textContent=title;
-  const body=document.getElementById('modal-body');
-  body.innerHTML=fields.map(f=>{
-    const id='mf-'+f.key;
-    let ctrl;
-    if(f.type==='select') ctrl='<select id="'+id+'">'+f.options.map(([v,l])=>'<option value="'+esc(v)+'"'+(f.value===v?' selected':'')+'>'+esc(l)+'</option>').join('')+'</select>';
-    else if(f.type==='textarea') ctrl='<textarea id="'+id+'" placeholder="'+esc(f.placeholder||'')+'">'+esc(f.value||'')+'</textarea>';
-    else ctrl='<input type="'+(f.type||'text')+'" id="'+id+'" value="'+esc(f.value||'')+'" placeholder="'+esc(f.placeholder||'')+'">';
-    return '<div class="field"><label for="'+id+'">'+esc(f.label)+'</label>'+ctrl+'</div>';
-  }).join('');
-  document.getElementById('modal-confirm').textContent=confirmLabel||'Salvează';
-  modalConfirm=onConfirm;
-  document.getElementById('modal').classList.add('open');
-  setTimeout(()=>{ const first=body.querySelector('input,select,textarea'); if(first) first.focus(); },60);
-}
-function closeModal(){ document.getElementById('modal').classList.remove('open'); modalConfirm=null; }
-function modalValues(){
-  const out={};
-  document.querySelectorAll('#modal-body [id^="mf-"]').forEach(el=>{ out[el.id.slice(3)]=el.value; });
-  return out;
-}
-
-/* ---------- Navigare ---------- */
-function switchTab(id){
-  state.ui.activeTab=id;
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+id));
-  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
-  saveState();
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(id==='meteo' && state.weather) renderWeather(state.weather);
-  if(id==='rdv') renderRdv();
-}
-document.querySelectorAll('.nav-tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
-
-/* ---------- Binding input → state ---------- */
-function handleBind(e){
-  const el=e.target, path=el.dataset.bind;
-  if(!path) return;
-  let v=el.value;
-  if(el.type==='checkbox') v=el.checked;
-  setPath(state,path,v);
-  saveState();
-  if(path.indexOf('equipment.')===0) refreshStatusPills();
-}
-document.addEventListener('input',handleBind);
-document.addEventListener('change',handleBind);
-document.addEventListener('change',e=>{
-  const chk=e.target.closest('[data-check]');
-  if(!chk) return;
-  const i=chk.dataset.check;
-  if(chk.checked) state.checklist.items[i]=true; else delete state.checklist.items[i];
-  chk.closest('.check-item').classList.toggle('done',chk.checked);
-  saveState();
-});
-
-/* =========================================================================
-   TAB 1 — SIT & CLĂDIRI
-   ========================================================================= */
-function renderSit(){
-  const g=document.getElementById('sit-gates');
-  g.innerHTML=[
-    ['pc1','Poarta Culisantă #1','Acces principal'],
-    ['pc2','Poarta Culisantă #2','Acces secundar'],
-    ['pc3','Poarta Culisantă #3','Acces tehnic'],
-    ['parking','Poartă Parking','Acces parcare']
-  ].map(([id,name,meta])=>equipCard('gate',name,meta,'equipment.gates.'+id)).join('');
-  document.getElementById('sit-gates-count').textContent='4 accesuri';
-
-  document.getElementById('sit-levels').innerHTML=LEVELS.map(([id,label])=>{
-    const base='equipment.levels.'+id;
-    const panels=[1,2,3,4].map(n=>
-      '<div class="panel-item"><span>TGBT-'+n+'</span>'+statusSelect(base+'.panels.TGBT'+n,STATUS_OPTIONS)+'</div>'
-    ).join('');
-    return '<div class="level-card">'+
-      '<div class="level-head"><span class="equip-icon">'+icon('building')+'</span><strong>'+esc(label)+'</strong><span class="spacer" style="flex:1"></span><span class="pill p-functional">800 m²</span></div>'+
-      '<div class="lot"><div class="lot-label">LOT A <span class="area">400 m²</span></div><input type="text" data-bind="'+base+'.lotA.tenant" value="'+esc(getPath(state,base+'.lotA.tenant'))+'" placeholder="Chiriaș / firmă — Lot A"></div>'+
-      '<div class="lot"><div class="lot-label">LOT B <span class="area">400 m²</span></div><input type="text" data-bind="'+base+'.lotB.tenant" value="'+esc(getPath(state,base+'.lotB.tenant'))+'" placeholder="Chiriaș / firmă — Lot B"></div>'+
-      '<div class="panels"><div class="panels-title">TABLOURI ÉLECTRIQUES — 4 × 200 m² (total 800 m²)</div><div class="panel-row">'+panels+'</div></div>'+
-      logsBlock(base+'.logs')+
-      '</div>';
-  }).join('');
-
-  document.getElementById('sit-elevators').innerHTML=[
-    ['asc1','Ascensor #1'],['asc2','Ascensor #2']
-  ].map(([id,name])=>{
-    const p='equipment.elevators.'+id;
-    const e=state.equipment.elevators[id];
-    return '<div class="equip-card">'+
-      '<div class="equip-top"><span class="equip-icon">'+icon('elevator')+'</span><div><div class="equip-name">'+name+'</div><div class="equip-meta">Clădire principală</div></div></div>'+
-      '<div class="grid grid-2"><div class="field"><label>Status</label>'+statusSelect(p+'.status',STATUS_OPTIONS)+'</div>'+
-      '<div class="field"><label>Ultima revizie</label><input type="date" data-bind="'+p+'.lastRevision" value="'+esc(e.lastRevision)+'"></div></div>'+
-      statusPill(e.status)+
-      '<div class="equip-foot"><button class="btn btn-sm btn-red" data-action="report-fault" data-target="'+p+'">'+icon('alert')+' Semnalare pană</button>'+logButton(p+'.logs')+'</div>'+
-      logsBlock(p+'.logs')+'</div>';
-  }).join('');
-
-  document.getElementById('sit-acti').innerHTML=[1,2,3,4].map(n=>{
-    const p='equipment.acti.ACTI'+n, a=state.equipment.acti['ACTI'+n];
-    const doors=[1,2,3].map(d=>
-      '<div class="door"><div class="d-name">POARTA '+d+'</div>'+statusSelect(p+'.doors.d'+d,DOOR_OPTIONS)+'<div class="d-dim">350 × 400 cm</div></div>'
-    ).join('');
-    return '<div class="acti-card">'+
-      '<div class="acti-head"><strong>ACTI '+n+'</strong><span class="spacer"></span><span class="spec">Înălțime liberă 7 m</span></div>'+
-      '<div class="acti-body">'+
-        '<div class="grid grid-2">'+
-          '<div class="field"><label>Suprafață (m²)</label><input type="text" data-bind="'+p+'.surface" value="'+esc(a.surface)+'" placeholder="Ex. 1 200 m²"></div>'+
-          '<div class="field"><label>Chiriaș / firmă</label><input type="text" data-bind="'+p+'.tenant" value="'+esc(a.tenant)+'" placeholder="Locatar ACTI '+n+'"></div>'+
-        '</div>'+
-        '<div class="panels-title" style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.6px">PORȚI SECȚIONALE — 3 × (350 × 400 cm), ridicare în sus</div>'+
-        '<div class="door-grid">'+doors+'</div>'+
-        logsBlock(p+'.logs')+
-        '<div class="equip-foot">'+logButton(p+'.logs')+'</div>'+
-      '</div></div>';
-  }).join('');
-}
-
-function renderArcade(){
-  const cab=document.getElementById('sit-arcade');
-  if(!cab) return;
-  const floors=['rdc','e1','e2'];
-  cab.innerHTML=floors.map(function(key){
-    var a=state.equipment.arcade[key];
-    var items = Array.isArray(a.tenants) ? a.tenants : (typeof a.tenantA==='string' ? [{name:a.tenantA, media:a.media}] : []);
-    var lotItems = items.map(function(t){
-      var mHref='./media/societati/'+esc(t.media);
-      var link = mHref;
-      if(t.site){ link = mHref + ' <a href="'+mHref+'" target="_blank" style="color:var(--blue)">'+esc(t.site)+'</a>'; }
-      return '<div class="lot"><div class="lot-label">'+esc(t.name)+'</div><div style="font-size:12px;color:var(--muted)">'+link+'</div></div>';
-    }).join('');
-    return '<div class="card flush"><div class="card-head"><h3>'+esc(a.floor)+'</h3><span class="spacer"></span><span class="pill">'+esc(a.surface)+'</span></div><div class="card-body"><div class="grid grid-2">'+lotItems+'</div></div></div>';
-  }).join('');
-}
-
-function equipCard(kind,name,meta,path){
-  const e=getPath(state,path);
-  return '<div class="equip-card">'+
-    '<div class="equip-top"><span class="equip-icon">'+icon(kind)+'</span><div class="equip-name">'+esc(name)+'<div class="equip-meta">'+esc(meta)+'</div></div></div>'+
-    statusPill(e.status)+
-    '<div class="field"><label>Status rapid</label>'+statusSelect(path+'.status',STATUS_OPTIONS)+'</div>'+
-    '<div class="equip-foot">'+logButton(path+'.logs')+'</div>'+
-    logsBlock(path+'.logs')+'</div>';
-}
-function logButton(path){
-  return '<button class="btn btn-sm" data-action="add-log" data-target="'+path+'">'+icon('plus')+' Intervenție</button>';
-}
-function logsBlock(path){
-  const logs=getPath(state,path)||[];
-  if(!logs.length) return '<div class="logs"><div class="empty">Nicio intervenție înregistrată.</div></div>';
-  return '<div class="logs">'+logs.slice().reverse().map((l,i)=>
-    '<div class="log-item"><time>'+esc(l.date||'—')+'</time><span>'+esc(l.text)+'</span><button class="log-del" data-action="del-log" data-target="'+path+'" data-index="'+(logs.length-1-i)+'" title="Șterge">×</button></div>'
-  ).join('')+'</div>';
-}
-function refreshStatusPills(){
-  document.querySelectorAll('[data-bind$=".status"]').forEach(sel=>{
-    const card=sel.closest('.equip-card');
-    const pill=card?Array.from(card.children).find(c=>c.classList&&c.classList.contains('pill'))
-                   :sel.parentElement.querySelector('.pill');
-    if(pill){
-      const opt=sel.options[sel.selectedIndex];
-      const map={'Funcțional':'p-functional','Defecțiune':'p-defect','În mentenanță':'p-maintenance','OK':'p-ok','Blocată':'p-blocked','Necesită reglaj':'p-adjust'};
-      pill.className='pill '+(map[opt.text]||'p-functional');
-      pill.textContent=opt.text;
-    }
-  });
-}
-
-/* =========================================================================
-   TAB 2 — ROND & RAPORT FR
-   ========================================================================= */
-function renderRondStatic(){
-  const zs=document.getElementById('round-zone');
-  zs.innerHTML=ZONES.map(z=>'<option value="'+z.id+'">'+esc(z.ro)+'</option>').join('');
-  const d=state.roundDraft;
-  if(!d.date) d.date=todayStr();
-  if(!d.time) d.time=new Date().toTimeString().slice(0,5);
-  document.getElementById('round-date').value=d.date;
-  document.getElementById('round-time').value=d.time;
-  document.getElementById('round-zone').value=d.zone||'gate-pc1';
-}
-function renderChecklist(){
-  if(!state.checklist.date || state.checklist.date!==todayStr()){
-    state.checklist={date:todayStr(),items:{}};
-    saveState();
-  }
-  document.getElementById('checklist-date').textContent='Astăzi: '+fmtDate(state.checklist.date);
-  document.getElementById('checklist').innerHTML=CHECK_ITEMS.map((label,i)=>{
-    const done=!!state.checklist.items[i];
-    return '<label class="check-item'+(done?' done':'')+'"><input type="checkbox" data-check="'+i+'"'+(done?' checked':'')+'><span>'+esc(label)+'</span></label>';
-  }).join('');
-}
-function renderRounds(){
-  const list=document.getElementById('rounds-list');
-  document.getElementById('rounds-count').textContent=state.rounds.length+' înregistrări';
-  if(!state.rounds.length){ list.innerHTML='<div class="empty">Nicio constatare salvată.</div>'; return; }
-  list.innerHTML=state.rounds.slice().reverse().map(r=>{
-    const z=ZONES.find(x=>x.id===r.zone);
-    return '<div class="item-row"><div class="item-main">'+
-      '<div class="item-title">'+esc(z?z.ro:r.zone)+(r.subzone?' · '+esc(r.subzone):'')+'</div>'+
-      '<div class="item-sub">'+esc(fmtDate(r.date))+' · '+esc(r.time||'')+' · '+esc(URGENCE_FR[r.urgence]||r.urgence)+(r.photo?' · 📷 foto':'')+'</div>'+
-      '<div class="item-sub">'+esc(r.observation||'')+'</div></div>'+
-      '<div class="item-side">'+statusPill(r.urgence==='critique'?'defect':r.urgence==='eleve'?'maintenance':'functional')+
-      '<button class="icon-btn" data-action="show-round-report" data-id="'+r.id+'" title="Raport FR">'+icon('copy')+'</button>'+
-      '<button class="icon-btn danger" data-action="del-round" data-id="'+r.id+'" title="Șterge">'+icon('trash')+'</button></div></div>';
-  }).join('');
-}
-function buildFrenchReport(d,photoName){
-  const z=ZONES.find(x=>x.id===d.zone)||{ro:d.zone,fr:d.zone};
-  const dateFR=d.date?new Date(d.date+'T00:00:00').toLocaleDateString('fr-FR'):'—';
-  const obs=(d.observation||'').trim();
-  const translation=obs?translateObservation(obs):'Aucune observation détaillée saisie.';
-  return [
-    '============================================================',
-    'MAIN COURANTE / DEMANDE D’INTERVENTION',
-    'PARC DE LA SAUSSAIE',
-    '============================================================',
-    'Date        : '+dateFR,
-    'Heure       : '+(d.time||'—'),
-    'Lieu        : '+z.fr+(d.subzone?' — '+d.subzone:''),
-    'Type        : '+(TYPE_FR[d.type]||d.type),
-    'Urgence     : '+(URGENCE_FR[d.urgence]||d.urgence),
-    '',
-    'CONSTAT',
-    '-------',
-    translation,
-    '',
-    'Pièce jointe: '+(photoName||'Aucune'),
-    'Déclaré par : Régisseur – Parc de la Saussaie',
-    'Coordonnées : 48.7745, 2.3536 (France)',
-    '',
-    '------------------------------------------------------------',
-    'Document généré automatiquement – Régisseur / Main courante'
-  ].join('\n');
-}
-function translateObservation(ro){
-  const dict=[
-    [/nu (?:se )?(?:deschide|deschid)/gi,'ne s’ouvre pas / blocage à l’ouverture'],
-    [/nu (?:se )?(?:închide|închid)/gi,'ne se ferme pas / blocage à la fermeture'],
-    [/blocat(?:ă)?/gi,'bloqué(e)'],
-    [/defect(?:iune)?/gi,'défaillance / panne'],
-    [/pană/gi,'panne'],
-    [/pana/gi,'panne'],
-    [/reglaj/gi,'réglage nécessaire'],
-    [/scârțâi|scartai|zgomot/gi,'bruit anormal'],
-    [/scurgeri?|inundație/gi,'fuite / inondation'],
-    [/cabl[uo]ri?|fire? (?:expuse|dezizolate)/gi,'câblage endommagé'],
-    [/tablou electric/gi,'tableau électrique'],
-    [/poart[ăa] culisant[ăa]/gi,'porte coulissante'],
-    [/poart[ăa] (?:parking|de parcare)/gi,'porte du parking'],
-    [/poart[ăa] secțional[ăa]/gi,'porte sectionnelle'],
-    [/ascensor/gi,'ascenseur'],
-    [/iluminat|lumin[ăa]/gi,'éclairage'],
-    [/spațiu verde|spații verzi/gi,'espace vert / espaces verts'],
-    [/arbore|arbori/gi,'arbre / arbres'],
-    [/grădină/gi,'jardin'],
-    [/trecător|persoan[ăa]/gi,'passage / personne'],
-    [/siguranță/gi,'sécurité'],
-    [/întreținere|mentenanță/gi,'maintenance'],
-    [/control/gi,'contrôle'],
-    [/verificat/gi,'vérifié'],
-    [/necesită/gi,'nécessite'],
-    [/urgent/gi,'urgent'],
-    [/astăzi/gi,'aujourd’hui'],
-    [/miercuri/gi,'mercredi'],
-    [/dimineață/gi,'ce matin'],
-    [/seara/gi,'ce soir']
-  ];
-  let out=' '+obs+' ';
-  dict.forEach(([re,fr])=>{ out=out.replace(re,fr); });
-  out=out.trim();
-  const hasFR=/[éèêàçùûîôœ’]/.test(out);
-  if(!hasFR && /^[a-zA-Z0-9 ,.\-]+$/.test(out)){
-    return 'Constat technique : '+out+'. Sensibiliser le prestataire concerné et consigner l’intervention dans le registre de maintenance.';
-  }
-  return out.charAt(0).toUpperCase()+out.slice(1)+'. Consigner la suite donnée dans le registre de maintenance.';
-}
-function showReport(text){
-  lastReport=text;
-  document.getElementById('report-text').textContent=text;
-  document.getElementById('report-box').style.display='block';
-  document.getElementById('report-box').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-/* ---------- Dictare & foto ---------- */
-let recognition=null,recording=false;
-function toggleDictation(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){ toast('Dictarea vocală nu este suportată de acest browser.'); return; }
-  if(recording){ recognition.stop(); return; }
-  recognition=new SR();
-  recognition.lang='ro-RO';recognition.continuous=true;recognition.interimResults=true;
-  recognition.onstart=()=>{
-    recording=true;
-    document.getElementById('dict-btn').classList.add('recording');
-    document.querySelector('#dict-btn span').textContent='Oprește dictarea';
-    toast('Dictare activă — limba română (ro-RO)');
-  };
-  recognition.onresult=e=>{
-    let txt='';
-    for(let i=0;i<e.results.length;i++) txt+=e.results[i][0].transcript;
-    const ta=document.getElementById('round-observation');
-    ta.value=txt; state.roundDraft.observation=txt; saveState();
-  };
-  recognition.onerror=e=>toast('Eroare dictare: '+e.error);
-  recognition.onend=()=>{
-    recording=false;
-    document.getElementById('dict-btn').classList.remove('recording');
-    document.querySelector('#dict-btn span').textContent='Dictează ro-RO';
-  };
-  try{ recognition.start(); }catch(err){ toast('Nu se poate porni dictarea.'); }
-}
-function compressImage(file,max){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onload=()=>{
-      const img=new Image();
-      img.onload=()=>{
-        const scale=Math.min(1,max/Math.max(img.width,img.height));
-        const c=document.createElement('canvas');
-        c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);
-        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-        resolve(c.toDataURL('image/jpeg',0.72));
-      };
-      img.onerror=reject;img.src=reader.result;
-    };
-    reader.onerror=reject;reader.readAsDataURL(file);
-  });
-}
-
-/* =========================================================================
-   TAB 3 — CAMERE VIDEO
-   ========================================================================= */
-function renderCameras(){
-  Object.keys(CAMERAS).forEach(zone=>{
-    document.getElementById('cam-'+zone).innerHTML=CAMERAS[zone].map(c=>camCard(c)).join('');
-  });
-}
-function camCard(c){
-  const p='cameras.'+c.id;
-  const data=state.cameras[c.id]||{};
-  const lenses=c.lens?c.lens.map((label,i)=>lensBlock(label,p+'.lens'+(i+1),getPath(state,p+'.lens'+(i+1))||{})).join(''):'';
-  return '<div class="cam-card">'+
-    '<div class="cam-head"><span class="cam-dot"></span><strong>'+esc(c.name)+'</strong><span class="hint">'+(c.lens?'DUBLĂ':'IP / RTSP')+'</span></div>'+
-    '<div class="cam-body">'+
-      (c.lens?'':lensBlock('Flux principal',p,data))+
-      lenses+
-    '</div></div>';
-}
-function lensBlock(label,path,data){
-  const shots=data.shots||[];
-  return '<div class="lens">'+
-    '<div class="lens-title">'+esc(label)+'</div>'+
-    '<div class="grid grid-2">'+
-      '<div class="field"><label>Adresă IP</label><input type="text" data-bind="'+path+'.ip" value="'+esc(data.ip)+'" placeholder="192.168.1.x"></div>'+
-      '<div class="field"><label>Flux RTSP</label><input type="text" data-bind="'+path+'.rtsp" value="'+esc(data.rtsp)+'" placeholder="rtsp://…"></div>'+
-    '</div>'+
-    '<div class="field" style="margin-top:7px"><label>Note / incident</label><input type="text" data-bind="'+path+'.notes" value="'+esc(data.notes)+'" placeholder="Observații…"></div>'+
-    '<div class="btn-row" style="margin-top:8px">'+
-      '<label class="btn btn-sm" style="margin:0">'+icon('camera')+' Captură<input type="file" accept="image/*" capture="environment" data-shot="'+path+'" style="display:none"></label>'+
-      (data.rtsp?'<a class="btn btn-sm" href="'+esc(data.rtsp)+'" target="_blank" rel="noopener">Deschide flux</a>':'')+
-    '</div>'+
-    (shots.length?'<div class="shots">'+shots.map((s,i)=>
-      '<div class="shot"><img src="'+s.data+'" alt="captură"><button data-action="del-shot" data-path="'+path+'" data-index="'+i+'" title="Șterge">×</button></div>'
-    ).join('')+'</div>':'')+
-  '</div>';
-}
-
-/* =========================================================================
-   TAB 4 — RDV & AGENȚI
-   ========================================================================= */
-const RDV_STATUS=[['Programat','Programat'],['În curs','În curs'],['Finalizat','Finalizat']];
-function renderRdv(){
-  const box=document.getElementById('rdv-alerts');
-  const today=todayStr(), tomorrow=todayStr(new Date(Date.now()+86400000));
-  const alerts=state.rdv.filter(r=>r.date===today||r.date===tomorrow).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
-  box.innerHTML=alerts.length
-    ? '<div class="alert alert-orange">'+icon('clock')+'<span><strong>RDV-uri azi / mâine:</strong> '+alerts.map(r=>
-        (r.date===today?'<span class="badge-today">AZI</span>':'<span class="badge-tomorrow">MÂINE</span>')+' '+esc(r.time)+' · '+esc(r.location)+' · '+esc(r.firm)+' ('+esc(r.status)+')'
-      ).join(' · ')+'</span></div>'
-    : '<div class="alert alert-green">'+icon('check')+'<span>Nicio programare pentru azi sau mâine.</span></div>';
-
-  document.getElementById('rdv-count').textContent=state.rdv.length+' programări';
-  const list=document.getElementById('rdv-list');
-  if(!state.rdv.length){ list.innerHTML='<div class="empty">Nicio programare. Apasă „+ RDV” pentru a adăuga.</div>'; }
-  else{
-    list.innerHTML=state.rdv.slice().sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)).map(r=>{
-      const pill=r.status==='Finalizat'?'p-functional':r.status==='În curs'?'p-maintenance':'p-defect';
-      return '<div class="item-row"><div class="item-main">'+
-        '<div class="item-title">'+esc(r.location)+' — '+esc(r.firm)+'</div>'+
-        '<div class="item-sub">'+icon('clock')+' '+esc(fmtDate(r.date))+' · '+esc(r.time)+' · '+esc(r.reason||'')+'</div></div>'+
-        '<div class="item-side"><span class="pill '+pill+'">'+esc(r.status)+'</span>'+
-        '<button class="icon-btn" data-action="cycle-rdv" data-id="'+r.id+'" title="Schimbă status">'+icon('check')+'</button>'+
-        '<button class="icon-btn" data-action="edit-rdv" data-id="'+r.id+'" title="Editează">'+icon('edit')+'</button>'+
-        '<button class="icon-btn danger" data-action="del-rdv" data-id="'+r.id+'" title="Șterge">'+icon('trash')+'</button></div></div>';
-    }).join('');
-  }
-
-  document.getElementById('agents-count').textContent=state.agents.length+' contacte';
-  document.getElementById('agents-list').innerHTML=state.agents.map(a=>{
-    const init=(a.name||'?').trim().charAt(0).toUpperCase();
-    return '<div class="agent-card">'+
-      '<div class="agent-top"><div class="agent-avatar">'+esc(init)+'</div><div class="agent-info">'+
-        '<strong>'+esc(a.name)+'</strong><small>'+esc(a.firm||'—')+'</small></div>'+
-        (a.phone?'<a class="call-btn" href="tel:'+esc(a.phone.replace(/[^\d+]/g,''))+'">'+icon('phone')+' Sună</a>':'')+
-      '</div>'+
-      '<div><span class="tag">'+esc(a.specialty)+'</span></div>'+
-      (a.notes?'<div class="hint">'+esc(a.notes)+'</div>':'')+
-      '<div class="equip-foot"><button class="btn btn-sm" data-action="edit-agent" data-id="'+a.id+'">Editează</button>'+
-      '<button class="btn btn-sm" data-action="del-agent" data-id="'+a.id+'">Șterge</button></div>'+
-    '</div>';
-  }).join('');
-}
-function rdvFields(r){
-  r=r||{};
-  return [
-    {key:'date',label:'Dată',type:'date',value:r.date||todayStr()},
-    {key:'time',label:'Oră',type:'time',value:r.time||'09:00'},
-    {key:'location',label:'Locație (ex. ACTI 2 / Ascensor 1 / Poartă culisantă 1)',value:r.location||'',placeholder:'ACTI 2 / Ascensor 1 / Poartă culisantă 1'},
-    {key:'firm',label:'Firmă / Agent',value:r.firm||'',placeholder:'Denumire firmă sau agent'},
-    {key:'reason',label:'Motiv',type:'textarea',value:r.reason||'',placeholder:'Motivul intervenției'},
-    {key:'status',label:'Status',type:'select',options:RDV_STATUS,value:r.status||'Programat'}
-  ];
-}
-function agentFields(a){
-  a=a||{};
-  return [
-    {key:'name',label:'Nume',value:a.name||''},
-    {key:'firm',label:'Firmă',value:a.firm||''},
-    {key:'specialty',label:'Specialitate',type:'select',options:AGENT_CATEGORIES.map(c=>[c,c]),value:a.specialty||AGENT_CATEGORIES[0]},
-    {key:'phone',label:'Număr telefon',type:'tel',value:a.phone||'',placeholder:'06xx xxx xxx / 18 / 17'},
-    {key:'notes',label:'Observații',type:'textarea',value:a.notes||''}
-  ];
-}
-
-/* =========================================================================
-   TAB 5 — METEO & UNELTE
-   ========================================================================= */
-const WCODE={
-  0:'cer senin',1:'predominant senin',2:'parțial noros',3:'noros',45:'ceață',48:'ceață cu brumă',
-  51:'burniță ușoară',53:'burniță',55:'burniță densă',61:'ploaie ușoară',63:'ploaie',65:'ploaie puternică',
-  66:'ploaie înghețată',67:'ploaie înghețată puternică',71:'zăpadă ușoară',73:'zăpadă',75:'zăpadă puternică',
-  77:'grăunțe de zăpadă',80:'averse ușoare',81:'averse',82:'averse puternice',85:'averse de zăpadă',86:'averse puternice de zăpadă',
-  95:'furtună',96:'furtună cu grindină',99:'furtună cu grindină puternică'
-};
-function weatherIcon(code){
-  if(code===0||code===1) return '☀️';
-  if(code===2||code===3) return '⛅';
-  if(code>=45&&code<=48) return '🌫️';
-  if(code>=51&&code<=67) return '🌧️';
-  if(code>=71&&code<=77) return '❄️';
-  if(code>=80&&code<=86) return '🌦️';
-  if(code>=95) return '⛈️';
-  return '🌤️';
-}
-async function fetchWeather(){
-  const btn=document.querySelector('[data-action="fetch-weather"]');
-  if(btn){ btn.textContent='Se încarcă…'; btn.disabled=true; }
-  const url='https://api.open-meteo.com/v1/forecast?latitude=48.7745&longitude=2.3536&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m&timezone=Europe%2FParis&forecast_days=1';
-  try{
-    const res=await fetch(url);
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const data=await res.json();
-    const c=data.current;
-    const w={temp:c.temperature_2m,feels:c.apparent_temperature,humidity:c.relative_humidity_2m,
-      precip:c.precipitation,code:c.weather_code,wind:c.wind_speed_10m,gusts:c.wind_gusts_10m,
-      dir:c.wind_direction_10m,time:c.time,updated:new Date().toISOString()};
-    state.weather=w;saveState();renderWeather(w);
-    if(w.gusts>60) toast('ALERTĂ VÂNT: rafale '+Math.round(w.gusts)+' km/h !');
-  }catch(err){
-    toast('Nu s-au putut încărca datele meteo: '+err.message);
-    if(btn){ btn.textContent='Actualizează vremea live (Open-Meteo)'; btn.disabled=false; }
+// Salvează PIN-ul în localStorage
+function savePIN(){
+  const pin = document.getElementById('pin-input').value;
+  if(pin) {
+    localStorage.setItem('parc_camera_pin', pin);
+    correctPIN = pin;
   }
 }
-function renderWeather(w){
-  const alert=w.gusts>60;
-  const desc=WCODE[w.code]||'condiții variabile';
-  document.getElementById('weather-box').innerHTML=
-    (alert?'<div class="alert alert-red">'+icon('alert')+'<span><strong>ALERTĂ VÂNT — rafale '+$fmt(w.gusts)+' km/h.</strong> Nu manevrați porțile mari 350 × 400 cm și verificați arborii / spațiile verzi. Limitare acces perimetru.</span></div>':
-      (w.gusts>45?'<div class="alert alert-orange">'+icon('alert')+'<span>Rafale moderate ('+$fmt(w.gusts)+' km/h) — prudență la manevrarea porților secționale și în zonele cu arbori.</span></div>':''))+
-    '<div class="weather-hero'+(alert?' alert':'')+'">'+
-      '<div class="weather-icon">'+weatherIcon(w.code)+'</div>'+
-      '<div class="weather-main"><div class="weather-temp">'+Math.round(w.temp)+'°C</div><div class="weather-desc">'+esc(desc)+' · resimțit '+Math.round(w.feels)+'°C</div></div>'+
-      '<div style="width:100%;font-size:10.5px;opacity:.8">Actualizat: '+esc(w.updated?new Date(w.updated).toLocaleString('ro-RO'):'—')+' · Open-Meteo</div>'+
-      '<div class="weather-stats">'+
-        '<div class="wstat"><b>'+$fmt(w.gusts)+' km/h</b><span>Rafale vânt</span></div>'+
-        '<div class="wstat"><b>'+$fmt(w.wind)+' km/h</b><span>Vânt '+esc(dirName(w.dir))+'</span></div>'+
-        '<div class="wstat"><b>'+Math.round(w.humidity)+'%</b><span>Umiditate</span></div>'+
-        '<div class="wstat"><b>'+$fmt(w.precip)+' mm</b><span>Precipitații</span></div>'+
-      '</div>'+
-    '</div>'+
-    '<div style="margin-top:10px"><button class="btn btn-block" data-action="fetch-weather">Actualizează vremea</button></div>';
-}
-function $fmt(n){ return n==null?'—':(Math.round(n*10)/10).toString().replace('.',','); }
-function dirName(d){
-  if(d==null) return '';
-  const names=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSV','SV','VSV','V','VNV','NV','NNV'];
-  return names[Math.round(d/22.5)%16];
+
+// Afișează fereastra PIN
+function showPIN(){
+  document.getElementById('pin-box').style.display = 'block';
+  document.getElementById('pin-input').focus();
 }
 
-/* =========================================================================
-   EXPORT / IMPORT
-   ========================================================================= */
-function exportJSON(){
-  saveState(true);
-  const payload={_app:'Régisseur – Parc de la Saussaie',_exportedAt:new Date().toISOString(),data:state};
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='regisseur-parc-saussaie-'+todayStr()+'.json';
-  document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-  toast('Backup JSON exportat.');
-}
-function importJSON(file){
-  const reader=new FileReader();
-  reader.onload=()=>{
-    try{
-      const parsed=JSON.parse(reader.result);
-      const incoming=parsed.data||parsed;
-      if(!incoming||typeof incoming!=='object') throw new Error('Format invalid');
-      state=deepMerge(defaultState(),incoming);
-      saveState(true);renderAll();
-      toast('Date importate cu succes.');
-    }catch(err){ toast('Eroare la import: '+err.message); }
-  };
-  reader.readAsText(file);
+// Ascunde fereastra PIN
+function hidePIN(){
+  document.getElementById('pin-box').style.display = 'none';
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-error').style.display = 'none';
+  document.getElementById('cam-info').classList.remove('active');
 }
 
-/* =========================================================================
-   ACȚIUNI GLOBALE (event delegation)
-   ========================================================================= */
-document.addEventListener('click',async e=>{
-  const btn=e.target.closest('[data-action]');
-  if(!btn) return;
-  const a=btn.dataset.action, target=btn.dataset.target, id=btn.dataset.id;
-
-  switch(a){
-    case 'export-json': exportJSON();break;
-    case 'import-json': document.getElementById('import-file').click();break;
-    case 'print-view': window.print();break;
-    case 'reset-all':
-      openModal('Resetează toate datele',[{key:'confirm',label:'Scrie „RESET” pentru confirmare',value:''}],v=>{
-        if(v.confirm!=='RESET'){ toast('Confirmare invalidă.'); return; }
-        localStorage.removeItem(STORAGE_KEY);state=defaultState();saveState(true);renderAll();toast('Date resetate.');
-      },'Resetează');break;
-    case 'toggle-dictation': toggleDictation();break;
-    case 'generate-report':
-      showReport(buildFrenchReport(state.roundDraft,state.roundDraft.photoName));
-      toast('Raport în franceză generat.');break;
-    case 'save-round':{
-      const d=JSON.parse(JSON.stringify(state.roundDraft));
-      if(!d.observation||!d.observation.trim()){ toast('Adaugă o constatare înainte de salvare.');break; }
-      d.id=uid();d.report=buildFrenchReport(d,d.photoName);
-      state.rounds.push(d);
-      state.roundDraft.observation='';state.roundDraft.photo=null;state.roundDraft.photoName='';
-      document.getElementById('round-observation').value='';
-      document.getElementById('round-photo-preview').innerHTML='';
-      saveState(true);renderRounds();toast('Constatare salvată în carnet.');break;
-    }
-    case 'copy-report':
-      try{ await navigator.clipboard.writeText(lastReport); toast('Raport copiat.'); }
-      catch(err){ const ta=document.createElement('textarea');ta.value=lastReport;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('Raport copiat.'); }
-      break;
-    case 'download-report':{
-      const b=new Blob([lastReport],{type:'text/plain;charset=utf-8'});
-      const x=document.createElement('a');x.href=URL.createObjectURL(b);x.download='main-courante-'+todayStr()+'.txt';x.click();
-      setTimeout(()=>URL.revokeObjectURL(x.href),2000);break;
-    }
-    case 'show-round-report':{
-      const r=state.rounds.find(x=>x.id===id);
-      if(r) showReport(r.report||buildFrenchReport(r,r.photoName));break;
-    }
-    case 'del-round': state.rounds=state.rounds.filter(x=>x.id!==id);saveState();renderRounds();break;
-    case 'add-log':
-      openModal('Jurnal de intervenții',[
-        {key:'date',label:'Data',type:'date',value:todayStr()},
-        {key:'text',label:'Descriere intervenție',type:'textarea',placeholder:'Ex. Reglaj poartă, înlocuire lamă…'}
-      ],v=>{
-        if(!v.text.trim()){ toast('Descrierea este obligatorie.');return; }
-        getPath(state,target).push({date:v.date,text:v.text.trim()});
-        saveState();renderSit();toast('Intervenție adăugată.');
-      });break;
-    case 'del-log':
-      getPath(state,target).splice(parseInt(btn.dataset.index,10),1);
-      saveState();renderSit();break;
-    case 'report-fault':{
-      const e=getPath(state,target);
-      openModal('Semnalare pană',[
-        {key:'date',label:'Data',type:'date',value:todayStr()},
-        {key:'text',label:'Descriere pană',type:'textarea',value:'Pană semnalată — intervenție urgentă solicitată.'}
-      ],v=>{
-        e.status='defect';e.logs.push({date:v.date,text:'PANĂ: '+v.text});
-        saveState();renderSit();toast('Pana a fost semnalată.');
-      },'Semnalază');break;
-    }
-    case 'add-rdv':
-      openModal('Adaugă programare (RDV)',rdvFields(),v=>{
-        if(!v.location.trim()){ toast('Locația este obligatorie.');return; }
-        v.id=uid();state.rdv.push(v);saveState();renderRdv();toast('RDV adăugat.');
-      });break;
-    case 'edit-rdv':{
-      const r=state.rdv.find(x=>x.id===id);if(!r)break;
-      openModal('Editează programarea',rdvFields(r),v=>{
-        Object.assign(r,v);saveState();renderRdv();toast('RDV actualizat.');
-      });break;
-    }
-    case 'cycle-rdv':{
-      const r=state.rdv.find(x=>x.id===id);if(!r)break;
-      r.status=RDV_STATUS[(RDV_STATUS.findIndex(s=>s[0]===r.status)+1)%3][0];
-      saveState();renderRdv();break;
-    }
-    case 'del-rdv': state.rdv=state.rdv.filter(x=>x.id!==id);saveState();renderRdv();break;
-    case 'add-agent':
-      openModal('Adaugă agent / firmă',agentFields(),v=>{
-        if(!v.name.trim()){ toast('Numele este obligatoriu.');return; }
-        v.id=uid();state.agents.push(v);saveState();renderRdv();toast('Agent adăugat.');
-      });break;
-    case 'edit-agent':{
-      const ag=state.agents.find(x=>x.id===id);if(!ag)break;
-      openModal('Editează agentul',agentFields(ag),v=>{
-        Object.assign(ag,v);saveState();renderRdv();toast('Agent actualizat.');
-      });break;
-    }
-    case 'del-agent': state.agents=state.agents.filter(x=>x.id!==id);saveState();renderRdv();break;
-    case 'del-shot':{
-      const arr=getPath(state,btn.dataset.path+'.shots')||[];
-      arr.splice(parseInt(btn.dataset.index,10),1);saveState();renderCameras();break;
-    }
-    case 'fetch-weather': fetchWeather();break;
-    case 'modal-cancel': closeModal();break;
-    case 'modal-confirm':{
-      if(modalConfirm) modalConfirm(modalValues());
-      if(document.getElementById('modal').classList.contains('open')) closeModal();
-      break;
-    }
+// Trimite PIN-ul
+document.getElementById('pin-input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){
+    document.getElementById('pin-submit').click();
   }
 });
-document.getElementById('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
-document.getElementById('import-file').addEventListener('change',e=>{
-  if(e.target.files[0]) importJSON(e.target.files[0]);
-  e.target.value='';
-});
 
-/* ---------- Foto rond ---------- */
-document.getElementById('round-photo').addEventListener('change',async e=>{
-  const f=e.target.files[0];if(!f)return;
-  try{
-    const data=await compressImage(f,1000);
-    state.roundDraft.photo=data;state.roundDraft.photoName=f.name;
-    document.getElementById('round-photo-preview').innerHTML=
-      '<div style="display:flex;gap:8px;align-items:center"><img src="'+data+'" alt="foto" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--border)"><span class="hint">'+esc(f.name)+' — atașat raportului</span></div>';
-    saveState();toast('Foto atașată.');
-  }catch(err){ toast('Eroare la procesarea foto.'); }
-  e.target.value='';
-});
+// Creăm butonul submit
+const submitBtn = document.createElement('button');
+submitBtn.id = 'pin-submit';
+submitBtn.className = 'btn btn-primary';
+submitBtn.style.cssText = 'margin-top:12px;';
+submitBtn.textContent = 'Autentificare';
+document.querySelector('.card-body').appendChild(submitBtn);
 
-/* ---------- Capturi camere ---------- */
-document.addEventListener('change',async e=>{
-  const path=e.target.dataset.shot;
-  if(!path||!e.target.files[0])return;
-  const f=e.target.files[0];
-  try{
-    const data=await compressImage(f,640);
-    const node=getPath(state,path);
-    if(!node.shots) node.shots=[];
-    if(node.shots.length>=6) node.shots.shift();
-    node.shots.push({date:todayStr(),data});
-    saveState();renderCameras();toast('Captură salvată.');
-  }catch(err){ toast('Eroare la salvarea capturii.'); }
-  e.target.value='';
-});
-
-/* =========================================================================
-   INIT
-   ========================================================================= */
-function renderAll(){
-  renderSit();renderArcade();renderRondStatic();renderChecklist();renderRounds();renderCameras();renderRdv();
-  if(state.weather) renderWeather(state.weather);
-  const tab=state.ui.activeTab||'sit';
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+tab));
-  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
-  document.getElementById('last-saved').value=new Date().toLocaleString('ro-RO');
+// Când PIN-ul e corect, afișează datele camerei
+function onPinCorrect(){
+  document.getElementById('pin-error').style.display = 'none';
+  document.getElementById('cam-info').classList.add('active');
+  document.getElementById('pin-input').value = '';
+  document.getElementById('cam-sn').textContent = CAMERA_DATA.sn;
+  hidePIN();
+  showToast('Acces permis. Datele camerei sunt afișate.');
 }
-renderAll();
-saveState(true);
+
+document.getElementById('pin-submit').addEventListener('click', function(){
+  const pin = document.getElementById('pin-input').value;
+  if(pin === correctPIN || correctPIN === null){
+    if(correctPIN === null){
+      if(pin === PIN_CODE){
+        savePIN();
+        onPinCorrect();
+      } else {
+        document.getElementById('pin-error').style.display = 'block';
+      }
+    } else {
+      onPinCorrect();
+    }
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+  }
+});
+
+// Buton: Copiază SN
+document.getElementById('copy-sn-btn').addEventListener('click', function(){
+  const sn = CAMERA_DATA.sn;
+  const tempInput = document.createElement('input');
+  tempInput.value = sn;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand('copy');
+  document.body.removeChild(tempInput);
+  showToast('Codul SN a fost copiat: ' + sn);
+});
+
+// Buton: Arată parola (afișează doar după autentificare)
+document.getElementById('show-pass-btn').addEventListener('click', function(){
+  const isAuthed = localStorage.getItem('parc_camera_pin') === correctPIN;
+  if(!isAuthed) {
+    showToast('Trebuie să fi autentificat pentru a vedea parola.');
+    return;
+  }
+  const pass = CAMERA_DATA.pass;
+  const modal = document.getElementById('pin-modal');
+  modal.style.display = 'flex';
+  modal.innerHTML = `
+    <div style="background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:center;max-width:400px;width:90%;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000">
+      <div style="font-size:22px;font-weight:750;padding:12px 0">${pass}</div>
+      <button class="btn btn-primary" id="close-pass" style="margin-top:12px">Închide</button>
+    </div>
+  `;
+  document.getElementById('close-pass').addEventListener('click', function(){
+    modal.innerHTML = '';
+    modal.style.display = 'none';
+  });
+});
+
+// Toast notification helper
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1B2A22;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:650;z-index:200;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:90vw;text-align:center;';
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => requestAnimationFrame(() => toast.style.opacity = '1'));
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => document.body.removeChild(toast), 400);
+  }, 2500);
+}
+
+// Încarcă PIN-ul și verifică la încărcare
+loadPIN();
+document.getElementById('pin-input').focus();
 </script>
 </body>
 </html>
