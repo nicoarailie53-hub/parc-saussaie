@@ -2,395 +2,580 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1E4D3B">
-<meta name="description" content="Parc de la Saussaie — Vitry — Aplicatie de supraveghere si management">
+<meta name="description" content="Parc de la Saussaie — Vitry-sur-Seine — supraveghere, ghid locatari, jurnal">
 <title>Parc de la Saussaie — Vitry — Asistent Ilie</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="media/societati/icon-512.png">
 <style>
 :root{
-  --green:#1E4D3B; --green-2:#2A6B52; --green-3:#3E8768;
-  --cream:#F7F4EC; --cream-2:#EFEADB; --paper:#FFFDF8;
-  --red:#B93A2B; --red-2:#D45A45; --text:#2A2A2A; --text-2:#6B6B6B;
+  --green:#1E4D3B; --green-2:#2A6B52; --cream:#F7F4EC; --cream-2:#EFEADB; --paper:#FFFDF8;
+  --red:#B93A2B; --text:#2A2A2A; --muted:#5C6560; --line:#E4DDD0; --ok:#1E88A8;
   --shadow:0 2px 12px rgba(0,0,0,.12);
 }
-*{box-sizing:border-box; margin:0; padding:0}
-html,body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--cream);color:var(--text);line-height:1.5}
-.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,var(--green),var(--green-2));color:#fff;padding:8px 16px;box-shadow:var(--shadow)}
-.header .brand{display:flex;align-items:center;gap:10px}.header .brand .logo{flex:0 0 36px;height:36px;border-radius:8px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:20px}
-.header .brand h1{font-size:17px;font-weight:800}.header .brand .tag{font-size:12px;opacity:.85;font-weight:600}
-
-.assistant-bar{position:fixed;left:0;right:0;bottom:0;z-index:200;background:linear-gradient(180deg,#1E4D3B 0%,#163C2E 100%);border-top:4px solid #E8712A;box-shadow:0 -4px 20px rgba(0,0,0,.3);padding:10px 14px;margin-bottom:12px}
-.assistant-bar .bar-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}.assistant-bar .bar-head .icon{font-size:22px}
-.assistant-bar .bar-head .name{font-size:16px;font-weight:800;color:#fff}.assistant-bar .bar-head .sub{font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:1px}
-.assistant-bar .voice-box{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 10px;min-height:44px;font-size:13px;color:#E0F2FE;word-break:break-word}
-.assistant-bar .cmd-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.assistant-bar .cmd-row button{padding:7px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;flex:1 1 auto}
-.assistant-bar .cmd-row button:hover{background:rgba(255,255,255,.22)}.assistant-bar .cmd-row button.primary{background:#22C55E;border-color:#22C55E}.assistant-bar .cmd-row button.opaque{background:rgba(255,255,255,.08)}
-
-.main{padding:12px 16px 120px;max-width:1200px;margin:0 auto}
-.card{background:var(--paper);border:1px solid var(--cream-2);border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
-.card h2{font-size:18px;font-weight:800;color:var(--green);margin-bottom:6px}
-.card .sub{font-size:13px;color:var(--text-2);margin-bottom:10px}
-.card .grid{display:grid;gap:12px}
-
-.cam-grid{grid-template-columns:repeat(7,1fr)}.cam-card{background:#fff;border:1px solid var(--cream-2);border-radius:8px;overflow:hidden;box-shadow:var(--shadow);transition:.2s}
-.cam-card.online{border-color:#1E88A8;box-shadow:0 0 0 2px rgba(30,136,168,.2)}.cam-card.offline{border-color:#B93A2B;box-shadow:0 0 0 2px rgba(185,58,43,.2)}
-.cam-card .ch{display:flex;align-items:center;gap:8px;padding:8px;background:#f8faf9;border-bottom:1px solid var(--cream-2)}
-.cam-card .ch .num{font-size:22px;font-weight:800}.cam-card .ch .name{font-size:14px;font-weight:700;color:var(--text)}
-.cam-card .ch .st{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:3px 8px;border-radius:10px}
-.cam-card.online .ch .st{color:#1E88A8}.cam-card.offline .ch .st{color:#B93A2B}.cam-card .ch .st .dot{width:7px;height:7px;border-radius:50%;background:#22C55E}.cam-card.offline .ch .st .dot{background:#B93A2B}
-.cam-card .body{padding:10px;text-align:center}
-.cam-card .body img{opacity:.85;transition:.3s;border-radius:4px}
-.cam-card.online .body img{opacity:1}
-.cam-card .body .ttl{font-size:11px;color:var(--text-2);font-weight:600;margin-top:6px}
-.cam-card .body .ips{font-size:10px;color:var(--text-2);font-family:'Courier New',monospace;font-weight:600;word-break:break-all;margin-top:4px}
-.cam-card .body .btn-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px}
-.cam-card .body .btn-row button{padding:6px 10px;border-radius:5px;border:1px solid var(--cream-2);background:#fff;cursor:pointer;font-size:11px;font-weight:700;flex:1 1 auto}
-.cam-card .body .btn-row button:hover{background:var(--cream)}
-.cam-card .body .btn-row .online{border-color:#1E88A8;color:#1E88A8}.cam-card .body .btn-row .online:hover{background:#E8F5E9}
-.cam-card .body .btn-row .def{border-color:#B93A2B;color:#B93A2B}.cam-card .body .btn-row .def:hover{background:#FFEBEE}
-.cam-card .tog{position:absolute;bottom:0;left:0;right:0;padding:8px;background:linear-gradient(0deg,rgba(0,0,0,.7),rgba(0,0,0,.6));display:flex;gap:8px;justify-content:center;border-radius:0 0 8px 8px;cursor:pointer}
-.cam-card .tog span{display:flex;align-items:center;gap:5px;font-size:11px;color:#fff;font-weight:700}
-
-.dir-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.dir-card{background:#fff;border:1px solid var(--cream-2);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
-.dir-card .dh{display:flex;align-items:center;gap:10px;padding:10px;background:#f8faf9;border-bottom:1px solid var(--cream-2)}
-.dir-card .dh .ic{font-size:20px}.dir-card .dh .ti{font-size:15px;font-weight:800;color:var(--text)}.dir-card .dh .fi{font-size:12px;color:var(--text-2);font-style:italic}
-.dir-card .dv{padding:10px;text-align:center}
-.dir-card .dv video{width:100%;height:140px;object-fit:cover;border-radius:4px;display:none}
-.dir-card .dv img{width:100%;height:140px;object-fit:cover;border-radius:4px;display:none}
-.dir-card .dv .dstatus{font-size:11px;font-weight:700;margin-top:6px}
-.dir-card .dv .dstatus.on{color:#1E88A8}.dir-card .dv .dstatus.off{color:#B93A2B}
-
-.journal-list{list-style:none;max-height:220px;overflow-y:auto;border:1px solid var(--cream-2);border-radius:6px}
-.journal-list li{padding:8px 10px;border-bottom:1px solid var(--cream-2);font-size:13px}
-.journal-list li:last-child{border-bottom:none}.journal-list li .tm{color:var(--text-2);font-size:11px}
-.map-wrap{width:100%;height:200px;border:1px solid var(--cream-2);border-radius:6px;position:relative;overflow:hidden}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--cream);color:var(--text);line-height:1.45}
+button,input,select,textarea{font:inherit}
+button{touch-action:manipulation;min-height:44px;cursor:pointer}
+a{color:var(--green-2)}
+.header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--green),var(--green-2));color:#fff;padding:12px 16px}
+.header h1{margin:0;font-size:18px}
+.header p{margin:2px 0 0;font-size:12px;opacity:.9}
+.main{max-width:1100px;margin:0 auto;padding:14px 14px calc(24px + env(safe-area-inset-bottom))}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 4px;font-size:18px;color:var(--green)}
+.sub{margin:0 0 12px;color:var(--muted);font-size:13px}
+.cam-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.cam-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.cam-card.online{box-shadow:inset 0 0 0 2px rgba(30,136,168,.45)}
+.cam-card.offline{box-shadow:inset 0 0 0 2px rgba(185,58,43,.45)}
+.cam-card .top{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 10px;background:#f6f3eb}
+.ch-id{font-weight:800}
+.pill{font-size:11px;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:4px 8px}
+.pill.on{color:var(--ok);background:#e7f6f4}
+.pill.off{color:var(--red);background:#fdeceb}
+.cam-card .body{padding:10px}
+.cam-card img.shot{width:100%;height:120px;object-fit:cover;background:#14382c;border-radius:6px;display:block}
+.ip{font-family:Consolas,monospace;font-size:12px;color:var(--muted);margin:8px 0}
+.name-row{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.name-row span{font-size:12px;color:var(--muted)}
+.name-row input{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:16px}
+.btn-row{display:flex;gap:8px}
+.btn-row button{flex:1}
+button.ghost{border:1px solid var(--line);background:#fff;border-radius:8px;font-weight:700}
+button.ok{border:1px solid var(--ok);background:#f3fbfb;color:#0f5f73;border-radius:8px;font-weight:700}
+button.bad{border:1px solid var(--red);background:#fff6f5;color:var(--red);border-radius:8px;font-weight:700}
+button.solid{border:0;background:var(--green);color:#fff;border-radius:8px;font-weight:700;padding:8px 12px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.dir-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.dir-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.dir-card h3{margin:0;font-size:15px}
+.dir-card header{padding:10px;background:#f6f3eb}
+.dir-card header p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.dir-card video,.dir-card img{display:block;width:100%;height:180px;object-fit:cover;background:#111}
+.journal-form{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.journal-form select,.journal-form input{min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:16px}
+.journal-form input{flex:1 1 180px}
+.journal-list{list-style:none;margin:0 0 12px;padding:0;max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.journal-list li{display:flex;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);font-size:14px}
+.journal-list li:last-child{border-bottom:0}
+.journal-list .tm{color:var(--muted);font-size:12px;margin-left:auto;white-space:nowrap}
+.journal-list button{min-height:36px;padding:4px 8px}
+.map-wrap{height:280px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .map-wrap iframe{width:100%;height:100%;border:0}
-.inc-form{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
-.inc-form input,.inc-form textarea,.inc-form select{padding:8px 10px;border:1px solid var(--cream-2);border-radius:6px;background:#fff;font-size:13px}
-.inc-form button{padding:8px 14px;border:none;border-radius:6px;background:var(--green);color:#fff;font-weight:700;cursor:pointer}
-.inc-form button:hover{background:var(--green-2)}
-
-.overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center}
-.overlay.show{display:flex}.overlay .box{background:var(--paper);border-radius:12px;padding:20px;max-width:480px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.3)}
-.overlay .box h2{font-size:20px;color:var(--green);margin-bottom:10px}
-.overlay .box textarea{width:100%;height:100px;border:1px solid var(--cream-2);border-radius:6px;padding:10px;font-size:14px;resize:none}
-.overlay .box .bts{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
-.overlay .box .bts button{padding:8px 14px;border:none;border-radius:6px;font-weight:700;cursor:pointer}
-.overlay .box .bts .ok{background:#22C55E;color:#fff}.overlay .box .bts .cancel{background:#B93A2B;color:#fff}
-.intro{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
-.intro.show{display:flex}.intro .box{background:var(--paper);border-radius:12px;padding:24px;width:90%;max-width:420px;text-align:center}
-.intro .box h2{font-size:18px;color:var(--green);margin-bottom:10px}.intro .box p{font-size:14px;color:var(--text-2);margin-bottom:16px}
-.intro .box button{padding:10px 20px;border:none;border-radius:6px;background:var(--green);color:#fff;font-weight:700;cursor:pointer}
-
-@media(max-width:700px){.cam-grid{grid-template-columns:repeat(4,1fr)}.assistant-bar{padding:8px 10px}.main{padding:8px 10px 100px}}
+.map-link{display:inline-flex;align-items:center;min-height:44px;margin-top:8px;font-weight:700}
+.assistant{background:#16382c;color:#fff;border-radius:12px;padding:12px;margin-bottom:14px;box-shadow:var(--shadow)}
+.assistant h2{margin:0;font-size:15px}
+.assistant .hint{margin:2px 0 8px;font-size:12px;color:#d5e4dc}
+.voice{min-height:40px;background:rgba(0,0,0,.25);border-radius:8px;padding:8px 10px;font-size:14px;margin-bottom:8px}
+.cmd-row{display:flex;flex-wrap:wrap;gap:8px}
+.cmd-row button{flex:1 1 140px;border:0;border-radius:8px;background:#2f6a56;color:#fff;font-weight:700}
+.cmd-row button.primary{background:#E8712A}
+.cmd-row button[aria-pressed="true"]{background:#22C55E;color:#05210f}
+.cmd-row input{flex:1 1 180px;min-height:44px;border:0;border-radius:8px;padding:8px 10px;font-size:16px}
+.overlay{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.show{display:flex}
+.overlay .box{width:min(520px,100%);background:var(--paper);border-radius:12px;padding:14px}
+.overlay h2{margin:0 0 8px;color:var(--green)}
+.overlay img{width:100%;height:240px;object-fit:contain;background:#10261e;border-radius:8px}
+.overlay .bts{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.overlay .bts a,.overlay .bts button{min-height:44px;display:inline-flex;align-items:center;padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none}
+.overlay .bts a{background:var(--green);color:#fff}
 </style>
 </head>
 <body>
+<header class="header">
+  <h1>Parc de la Saussaie — Vitry-sur-Seine</h1>
+  <p>Asistent Ilie · camere · ghid locatari · jurnal</p>
+</header>
 
-<div class="header">
-  <div class="brand">
-    <div class="logo">📷</div>
-    <div>
-      <h1>Parc de la Saussaie — Vitry</h1>
-      <div class="tag">Asistent Vocal · Supraveghere &amp; Arhivă Video</div>
-    </div>
-  </div>
-</div>
-
-<div class="main">
-
-  <div class="card">
-    <h2>📷 Supraveghere Video — 7 Camere (CH1–CH7)</h2>
-    <div class="sub">Auto-refresh · 1-PIN unlock per camera · Toggle ON/DEFECTĂ · Deschide stream direct</div>
-    <div class="grid cam-grid" id="cam-grid"></div>
-  </div>
-
-  <div class="card">
-    <h2>🏢 Guida Locatari &amp; Etaje — Bâtiment Arcade</h2>
-    <div class="sub">Secțiuni video/imagine și cantiere</div>
-    <div class="dir-grid" id="dir-grid"></div>
-  </div>
-
-  <div class="card">
-    <h2>📋 Jurnal Constatări &amp; Hartă Vitry</h2>
-    <div class="sub">Inregistrari incidente + hartă localizare (OpenStreetMap, keyless)</div>
-    <div class="inc-form">
-      <select id="inc-tip">
-        <option value="Eroare">Eroare</option>
-        <option value="Defectă">Defectă</option>
-        <option value="Incident">Incident</option>
-        <option value="Altele">Altele</option>
-      </select>
-      <input id="inc-desc" placeholder="Descriere...">
-      <button id="inc-add">Adaugă în jurnal</button>
-    </div>
-    <div id="inc-list" class="journal-list"></div>
-    <div class="map-wrap"><iframe src="https://www.openstreetmap.org/export/embed.html?bbox=5.98%2C48.76%2C6.02%2C48.79&amp;layer=mapnik&amp;marker=48.7745%2C2.3536" loading="lazy" title="Hartă Vitry"></iframe></div>
-  </div>
-</div>
-
-<div class="overlay" id="as-overlay">
-  <div class="box">
-    <h2>🎙️ Apelează-l pe Ilie</h2>
-    <div class="voice-box" id="as-voice">Așteaptă comandă...</div>
+<main class="main">
+  <section class="assistant" aria-label="Asistent Ilie">
+    <h2>Asistent Ilie</h2>
+    <p class="hint">ro-RO · „Ilie” → Prezent. · „Desfă camera 1…7” → Ok. sau Defectă. · „Continuă” → +5 secunde, fără pauză.</p>
+    <div class="voice" id="voice-box" aria-live="polite">Aștept o comandă.</div>
     <div class="cmd-row">
-      <button class="primary" id="as-mic">🎤 Mici</button>
-      <button id="as-call">📞 Apelează-l pe Ilie</button>
-      <button id="as-stop" class="opaque">⏹️ Stop</button>
+      <button type="button" class="primary" id="btn-listen" data-action="listen">Apelează-l pe Ilie</button>
+      <button type="button" id="btn-hands" data-action="hands-free" aria-pressed="false">Hands-free</button>
+      <button type="button" id="btn-continue" data-action="continue-video">Continuă +5s</button>
+      <input id="cmd-text" aria-label="Comandă scrisă" placeholder="Ilie / Desfă camera 3 / Continuă" autocomplete="off">
+      <button type="button" data-action="run-text">Execută</button>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="intro" id="intro">
+  <section class="card" id="cameras">
+    <h2>7. Camere supraveghere</h2>
+    <p class="sub">CH1–CH3 @ 192.168.1.64:8080 · CH5–CH6 @ 192.168.1.65:8080 · CH7 @ 192.168.1.66:8080. CH4 este pe 192.168.1.65:8080. Cinci active, două defecte. Numele și starea rămân în acest browser.</p>
+    <div class="cam-grid" id="cam-grid"></div>
+  </section>
+
+  <section class="card" id="guide">
+    <h2>Ghid locatari &amp; etaje</h2>
+    <p class="sub">Bâtiment Arcade — fișierele din media/societati/.</p>
+    <div class="dir-grid" id="dir-grid"></div>
+  </section>
+
+  <section class="card" id="journal">
+    <h2>Jurnal de constatări</h2>
+    <p class="sub">Se păstrează în acest browser. Harta Vitry-sur-Seine este OpenStreetMap, fără cheie API.</p>
+    <form class="journal-form" id="journal-form">
+      <select id="inc-tip" aria-label="Tip constatare">
+        <option>Eroare</option>
+        <option>Defectă</option>
+        <option>Incident</option>
+        <option>Altele</option>
+      </select>
+      <input id="inc-desc" aria-label="Descriere" placeholder="Descriere" maxlength="400" required>
+      <button class="solid" type="submit">Adaugă în jurnal</button>
+    </form>
+    <ul class="journal-list" id="inc-list"></ul>
+    <div class="map-wrap">
+      <iframe title="Hartă Vitry-sur-Seine" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.openstreetmap.org/export/embed.html?bbox=2.3500%2C48.7600%2C2.4400%2C48.8200&amp;layer=mapnik&amp;marker=48.7878%2C2.3917"></iframe>
+    </div>
+    <a class="map-link" href="https://www.openstreetmap.org/?mlat=48.7878&amp;mlon=2.3917#map=14/48.7878/2.3917" target="_blank" rel="noopener">Deschide harta Vitry-sur-Seine</a>
+  </section>
+</main>
+
+<div class="overlay" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewer-title">
   <div class="box">
-    <h2>🎙️ Asistent Ilie</h2>
-    <p>Spune cuvânt cheie <strong>"Ilie"</strong> pentru a porni / opri.</p>
-    <button id="intro-ok">Înțeleg</button>
+    <h2 id="viewer-title">Cameră</h2>
+    <img id="viewer-img" alt="Flux cameră">
+    <p class="ip" id="viewer-ip"></p>
+    <div class="bts">
+      <a id="viewer-link" target="_blank" rel="noopener">Deschide fluxul</a>
+      <button type="button" class="ghost" data-action="close-viewer">Închide</button>
+    </div>
   </div>
 </div>
 
 <script>
-const CAMERAS = [
-  {id:'CH1', ip:'192.168.1.64', port:'8080', label:'CH1', status:'online'},
-  {id:'CH2', ip:'192.168.1.64', port:'8080', label:'CH2', status:'online'},
-  {id:'CH3', ip:'192.168.1.64', port:'8080', label:'CH3', status:'online'},
-  {id:'CH4', ip:'192.168.1.65', port:'8080', label:'CH4', status:'offline'},
-  {id:'CH5', ip:'192.168.1.65', port:'8080', label:'CH5', status:'online'},
-  {id:'CH6', ip:'192.168.1.65', port:'8080', label:'CH6', status:'online'},
-  {id:'CH7', ip:'192.168.1.66', port:'8080', label:'CH7', status:'offline'},
-];
-const DIRECTORY = [
-  {folder:'parter-rdc', name:'Parter / RDC ESCC', file:'arcade-rdc-escc.mp4', type:'video'},
-  {folder:'etaj1', name:'Etaj 1 ESCC', file:'arcade-etaj1-escc.mp4', type:'video'},
-  {folder:'etaj2', name:'Etaj 2 Hol Comun', file:'arcade-etaj2-comun.mp4', type:'video'},
-  {folder:'etaj2', name:'Etaj 2 Centre Ousswa', file:'arcade-etaj2-centre-ousswa.jpg', type:'img'},
-];
-
-function renderCameras(){
-  const grid = document.getElementById('cam-grid');
-  if(!grid) return;
-  grid.innerHTML = '';
-  CAMERAS.forEach(c => {
-    const isOn = c.status === 'online';
-    const card = document.createElement('div');
-    card.className = 'cam-card ' + (isOn ? 'online' : 'offline');
-    card.dataset.id = c.id;
-    card.innerHTML = '
-      <div class="ch">
-        <span class="num">📷</span>
-        <span class="name">' + c.label + '</span>
-        <span class="st"><span class="dot"></span>' + (isOn ? 'ONLINE' : 'DEFECTA') + '</span>
-      </div>
-      <div class="body">
-        <img src="http://' + c.ip + ':' + c.port + '/cam1.jpg" alt="' + c.id + '" loading="lazy" onerror="this.src=\'media/societati/no-video.png\'">
-        <div class="ttl">Stream snapshot</div>
-        <div class="ips">' + c.ip + ':' + c.port + '</div>
-        <div class="btn-row">
-          <button class="online" onclick="openCamera(\'' + c.id + '\')">🟢 Deschide</button>
-          <button class="def" onclick="toggleCam(\'' + c.id + '\')">' + (isOn ? '🔴 DEFECTA' : '🟢 ONLINE') + '</button>
-        </div>
-        <div class="tog" onclick="toggleCam(\'' + c.id + '\')">
-          <span>' + (isOn ? '🔴 DEFECTA' : '🟢 ONLINE') + ' — ' + (isOn ? 'togleaza pe defect' : 'togleaza pe online') + '</span>
-        </div>
-      </div>
-    ';
-    grid.appendChild(card);
-  });
-}
-renderCameras();
-
-function loadCamStatus(){
-  CAMERAS.forEach(c => {
-    const saved = localStorage.getItem('cam_status_' + c.id);
-    if(saved === 'offline') c.status = 'offline';
-  });
-}
-loadCamStatus();
-
-function openCamera(id){
-  const c = CAMERAS.find(x => x.id === id);
-  if(c) window.open('http://' + c.ip + ':' + c.port + '/', '_blank', 'noopener');
-}
-
-function toggleCam(id){
-  const c = CAMERAS.find(x => x.id === id);
-  if(!c) return;
-  const pin = localStorage.getItem('cam_pin');
-  if(!pin){
-    alert('REDACTAT: PIN necesar');
-    return;
-  }
-  c.status = (c.status === 'online') ? 'offline' : 'online';
-  localStorage.setItem('cam_status_' + id, c.status);
-  renderCameras();
-}
-
-function renderDir(){
-  const grid = document.getElementById('dir-grid');
-  if(!grid) return;
-  grid.innerHTML = '';
-  const items = [
-    {folder:'parter-rdc', name:'Parter / RDC ESCC', file:'arcade-rdc-escc.mp4', type:'video'},
-    {folder:'etaj1', name:'Etaj 1 ESCC', file:'arcade-etaj1-escc.mp4', type:'video'},
-    {folder:'etaj2', name:'Etaj 2 Hol Comun', file:'arcade-etaj2-comun.mp4', type:'video'},
-    {folder:'etaj2', name:'Etaj 2 Centre Ousswa', file:'arcade-etaj2-centre-ousswa.jpg', type:'img'},
+(function () {
+  var CAMERAS = [
+    { id: 'CH1', host: '192.168.1.64:8080', stream: 'http://192.168.1.64:8080/cam1.jpg', status: 'online', label: 'CH1' },
+    { id: 'CH2', host: '192.168.1.64:8080', stream: 'http://192.168.1.64:8080/cam2.jpg', status: 'online', label: 'CH2' },
+    { id: 'CH3', host: '192.168.1.64:8080', stream: 'http://192.168.1.64:8080/cam3.jpg', status: 'online', label: 'CH3' },
+    { id: 'CH4', host: '192.168.1.65:8080', stream: 'http://192.168.1.65:8080/cam1.jpg', status: 'offline', label: 'CH4' },
+    { id: 'CH5', host: '192.168.1.65:8080', stream: 'http://192.168.1.65:8080/cam3.jpg', status: 'online', label: 'CH5' },
+    { id: 'CH6', host: '192.168.1.65:8080', stream: 'http://192.168.1.65:8080/cam2.jpg', status: 'online', label: 'CH6' },
+    { id: 'CH7', host: '192.168.1.66:8080', stream: 'http://192.168.1.66:8080/cam1.jpg', status: 'offline', label: 'CH7' }
   ];
-  items.forEach(d => {
-    const card = document.createElement('div');
-    card.className = 'dir-card';
-    card.innerHTML = '
-      <div class="dh">
-        <div class="ic">📁</div>
-        <div class="ti">' + d.name + '</div>
-        <div class="fi">' + d.folder + '</div>
-      </div>
-      <div class="dv">
-        ' + (d.type === 'video'
-          ? '<video controls preload="none"><source src="media/societati/' + d.file + '" type="video/mp4"></video>'
-          : '<img src="media/societati/' + d.file + '" alt="' + d.name + '" loading="lazy" style="width:100%;height:140px;object-fit:cover;border-radius:4px;">'
-        ) + '
-        <div class="dstatus ' + ((d.status === 'online') ? 'on' : 'off') + '">' + ((d.status === 'online') ? 'ONLINE' : 'DEFECTA') + '</div>
-      </div>
-    ';
-    grid.appendChild(card);
-  });
-}
-renderDir();
+  var GUIDE = [
+    { title: 'Parter / RDC — ESCC', file: 'arcade-rdc-escc.mp4', kind: 'video' },
+    { title: 'Etaj 1 — ESCC', file: 'arcade-etaj1-escc.mp4', kind: 'video' },
+    { title: 'Etaj 2 — hol comun', file: 'arcade-etaj2-comun.mp4', kind: 'video' },
+    { title: 'Etaj 2 — Centre Ousswa', file: 'arcade-etaj2-centre-ousswa.jpg', kind: 'image' }
+  ];
 
-function addJournal(entry){
-  const list = loadJournal();
-  list.push(entry);
-  saveJournal(list);
-  renderJournal();
-}
-function loadJournal(){
-  try { return JSON.parse(localStorage.getItem('parc_journal')) || []; } catch(e){ return []; }
-}
-function saveJournal(list){ localStorage.setItem('parc_journal', JSON.stringify(list)); }
-function renderJournal(){
-  const list = loadJournal();
-  const el = document.getElementById('inc-list');
-  if(!el) return;
-  el.innerHTML = list.map(e => '<li><strong>' + e.tip + '</strong> — ' + e.desc + ' <span class="tm">[' + e.tim + ']</span></li>').join('');
-}
-document.getElementById('inc-add').addEventListener('click', () => {
-  const tip = document.getElementById('inc-tip').value || 'Incident';
-  const desc = document.getElementById('inc-desc').value.trim() || '';
-  if(!desc){ alert('Introdu o descriere'); return; }
-  addJournal({tip, desc, tim: new Date().toLocaleString('ro-RO')});
-  document.getElementById('inc-desc').value = '';
-});
+  var NUMBERS = { unu: 1, doi: 2, doua: 2, trei: 3, patru: 4, cinci: 5, sase: 6, sapte: 7 };
+  var activeVideo = null;
+  var shotTimer = 0;
+  var listening = false;
+  var handsFree = false;
+  var recognition = null;
+  var voiceBox = document.getElementById('voice-box');
 
-/* ===== Voice Assistant ===== */
-const assistant = {
-  supported: false, sr: null, listening: false,
-  init(){
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(SR){
-      this.sr = new SR();
-      this.sr.lang = 'ro-RO';
-      this.sr.interimResults = false;
-      this.sr.maxAlternatives = 1;
-      this.supported = true;
-      this.sr.onresult = (e) => {
-        const txt = e.results[0][0].transcript.trim().toLowerCase();
-        this.voice(txt);
-        if(!this.listening){ this.sr.stop(); }
-      };
-      this.sr.onend = () => { if(this.listening) this.sr.start(); };
-    }
-    document.getElementById('as-mic').addEventListener('click', () => this.micOn());
-    document.getElementById('as-call').addEventListener('click', () => this.overlayShow());
-    document.getElementById('as-stop').addEventListener('click', () => this.stopListen());
-    document.getElementById('intro-ok').addEventListener('click', () => {
-      document.getElementById('intro').classList.remove('show');
+  function statusOf(cam) {
+    var saved = localStorage.getItem('cam_status_' + cam.id);
+    if (saved === 'online' || saved === 'offline') return saved;
+    return cam.status;
+  }
+
+  function nameOf(cam) {
+    var saved = localStorage.getItem('cam_name_' + cam.id);
+    return saved ? saved : cam.label;
+  }
+
+  function renderCameras() {
+    var grid = document.getElementById('cam-grid');
+    grid.replaceChildren();
+    CAMERAS.forEach(function (cam) {
+      var online = statusOf(cam) === 'online';
+      var card = document.createElement('article');
+      card.className = 'cam-card ' + (online ? 'online' : 'offline');
+      card.id = 'card-' + cam.id;
+
+      var top = document.createElement('div');
+      top.className = 'top';
+      var idEl = document.createElement('span');
+      idEl.className = 'ch-id';
+      idEl.textContent = cam.id;
+      var pill = document.createElement('span');
+      pill.className = 'pill ' + (online ? 'on' : 'off');
+      pill.textContent = online ? 'ONLINE' : 'DEFECTĂ';
+      top.append(idEl, pill);
+
+      var body = document.createElement('div');
+      body.className = 'body';
+      var img = document.createElement('img');
+      img.className = 'shot';
+      img.alt = cam.id;
+      img.referrerPolicy = 'no-referrer';
+      if (online) {
+        img.src = cam.stream;
+        img.addEventListener('error', function () {
+          img.removeAttribute('src');
+          img.alt = cam.id + ' — fără semnal';
+        });
+      } else {
+        img.alt = cam.id + ' — defectă';
+      }
+
+      var ip = document.createElement('div');
+      ip.className = 'ip';
+      ip.textContent = cam.host;
+
+      var nameRow = document.createElement('label');
+      nameRow.className = 'name-row';
+      var nameLabel = document.createElement('span');
+      nameLabel.textContent = 'Nume';
+      var nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.maxLength = 48;
+      nameInput.value = nameOf(cam);
+      nameInput.setAttribute('data-cam-name', cam.id);
+      nameInput.setAttribute('aria-label', 'Nume ' + cam.id);
+      nameRow.append(nameLabel, nameInput);
+
+      var row = document.createElement('div');
+      row.className = 'btn-row';
+      var openBtn = document.createElement('button');
+      openBtn.type = 'button';
+      openBtn.className = 'ok';
+      openBtn.textContent = 'Deschide';
+      openBtn.setAttribute('data-action', 'open-cam');
+      openBtn.setAttribute('data-id', cam.id);
+      openBtn.disabled = !online;
+      var toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = online ? 'bad' : 'ok';
+      toggleBtn.textContent = online ? 'Defectă' : 'Online';
+      toggleBtn.setAttribute('data-action', 'toggle-cam');
+      toggleBtn.setAttribute('data-id', cam.id);
+      row.append(openBtn, toggleBtn);
+      body.append(img, ip, nameRow, row);
+      card.append(top, body);
+      grid.appendChild(card);
     });
-  },
-  voice(txt){
-    const isIntro = document.getElementById('intro').classList.contains('show');
-    if(!isIntro && txt === 'ilie'){
-      this.speak('Prezent.');
+  }
+
+  function renderGuide() {
+    var grid = document.getElementById('dir-grid');
+    grid.replaceChildren();
+    GUIDE.forEach(function (item) {
+      var card = document.createElement('article');
+      card.className = 'dir-card';
+      var head = document.createElement('header');
+      var title = document.createElement('h3');
+      title.textContent = item.title;
+      var file = document.createElement('p');
+      file.textContent = item.file;
+      head.append(title, file);
+      var media;
+      if (item.kind === 'video') {
+        media = document.createElement('video');
+        media.controls = true;
+        media.playsInline = true;
+        media.preload = 'metadata';
+        media.src = 'media/societati/' + item.file;
+        media.addEventListener('play', function () { activeVideo = media; });
+        media.addEventListener('pause', function () { activeVideo = media; });
+      } else {
+        media = document.createElement('img');
+        media.src = 'media/societati/' + item.file;
+        media.alt = item.title;
+      }
+      card.append(head, media);
+      grid.appendChild(card);
+    });
+  }
+
+  function loadJournal() {
+    try {
+      var data = JSON.parse(localStorage.getItem('parc_journal') || '[]');
+      return Array.isArray(data) ? data : [];
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function renderJournal() {
+    var list = document.getElementById('inc-list');
+    var items = loadJournal();
+    list.replaceChildren();
+    if (!items.length) {
+      var empty = document.createElement('li');
+      empty.textContent = 'Nicio constatare.';
+      list.appendChild(empty);
       return;
     }
-    if(!isIntro){
-      const camMatch = txt.match(/(deschide|desfă|camera|foto)\s*(CH\s*(\d)|camera\s*(\d))/i);
-      if(camMatch){
-        const n = camMatch[3] || camMatch[4];
-        const cam = CAMERAS.find(c => c.id === 'CH'+n);
-        if(cam){
-          this.speak(cam.status === 'online' ? 'Ok.' : 'Defecta.');
-          openCamera(cam.id);
-        }
-        return;
-      }
-      if(txt === 'continuă'){
-        this.speak('Ok.');
-        this.jump(5);
-        return;
-      }
-      if(txt === 'înapoi'){
-        this.speak('Ok.');
-        this.jump(-5);
-        return;
-      }
-      if(txt === 'pauză' || txt === 'oprește' || txt === 'stop'){
-        this.speak('Ok.');
-        this.stopJump();
-        this.listening = false;
-        this.sr && this.sr.stop();
-        return;
-      }
-      this.speak('Nu am înțeles. Spune: Ilie, desfă camera X, continuă, înapoi, pauză.');
-    }
-  },
-  speak(text){
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'ro-RO';
-    utter.rate = 1.0;
-    window.speechSynthesis.speak(utter);
-  },
-  jump(seconds){
-    if(this.interval) this.stopJump();
-    this.interval = setInterval(() => {
-      const vb = document.getElementById('as-voice');
-      vb.textContent = 'Sărituri +' + seconds + 's...';
-      if(this.listening && this.sr) this.sr.stop();
-    }, 1000);
-  },
-  stopJump(){ if(this.interval){ clearInterval(this.interval); this.interval = null; } },
-  overlayShow(){
-    document.getElementById('as-overlay').classList.add('show');
-    if(this.supported && !this.listening && !document.getElementById('intro').classList.contains('show')){
-      this.sr && this.sr.start();
-      this.listening = true;
-    }
-  },
-  micOn(){
-    if(!this.supported) return;
-    if(!this.listening){
-      this.sr && this.sr.start();
-      this.listening = true;
-      document.getElementById('as-mic').textContent = 'Stop';
-    } else {
-      this.sr && this.sr.stop();
-      this.listening = false;
-      document.getElementById('as-mic').textContent = 'Mici';
-    }
-  },
-  stopListen(){
-    this.listening = false;
-    this.sr && this.sr.stop();
-    document.getElementById('as-mic').textContent = 'Mici';
+    items.forEach(function (entry, index) {
+      var li = document.createElement('li');
+      var strong = document.createElement('strong');
+      strong.textContent = entry.tip || 'Incident';
+      li.appendChild(strong);
+      li.appendChild(document.createTextNode(' — ' + (entry.desc || '')));
+      var time = document.createElement('span');
+      time.className = 'tm';
+      time.textContent = entry.tim || '';
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'ghost';
+      del.textContent = 'Șterge';
+      del.setAttribute('data-action', 'del-journal');
+      del.setAttribute('data-index', String(index));
+      li.append(time, del);
+      list.appendChild(li);
+    });
   }
-};
 
-document.addEventListener('DOMContentLoaded', () => {
-  assistant.init();
-});
+  function closeViewer() {
+    clearInterval(shotTimer);
+    shotTimer = 0;
+    document.getElementById('viewer').classList.remove('show');
+  }
+
+  function openCamera(id) {
+    var cam = CAMERAS.find(function (item) { return item.id === id; });
+    if (!cam || statusOf(cam) !== 'online') return;
+    var card = document.getElementById('card-' + id);
+    if (card) card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    document.getElementById('viewer-title').textContent = nameOf(cam) + ' · ' + cam.id;
+    document.getElementById('viewer-ip').textContent = cam.host;
+    var link = document.getElementById('viewer-link');
+    link.href = 'http://' + cam.host + '/';
+    var img = document.getElementById('viewer-img');
+    var tick = function () { img.src = cam.stream + '?t=' + Date.now(); };
+    tick();
+    clearInterval(shotTimer);
+    shotTimer = setInterval(tick, 1500);
+    document.getElementById('viewer').classList.add('show');
+  }
+
+  function toggleCamera(id) {
+    var cam = CAMERAS.find(function (item) { return item.id === id; });
+    if (!cam) return;
+    var next = statusOf(cam) === 'online' ? 'offline' : 'online';
+    localStorage.setItem('cam_status_' + id, next);
+    if (next === 'offline') closeViewer();
+    renderCameras();
+  }
+
+  function seekForward() {
+    var video = activeVideo;
+    if (!video || !document.contains(video)) video = document.querySelector('#dir-grid video');
+    if (!video) return;
+    activeVideo = video;
+    var bump = function () {
+      var target = (Number(video.currentTime) || 0) + 5;
+      if (Number.isFinite(video.duration) && video.duration > 0) {
+        target = Math.min(target, Math.max(0, video.duration - 0.05));
+      }
+      try { video.currentTime = target; } catch (err) {}
+    };
+    if (video.readyState < 1) {
+      video.addEventListener('loadedmetadata', function onMeta() {
+        video.removeEventListener('loadedmetadata', onMeta);
+        bump();
+      });
+    } else {
+      bump();
+    }
+    var pending = video.play();
+    if (pending && typeof pending.catch === 'function') pending.catch(function () {});
+  }
+
+  function strip(text) {
+    return String(text || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function cameraFromPhrase(text) {
+    var match = text.match(/\b(?:desfa|deschide)\s+camera(?:\s+(?:nr|numarul|ch))?\s+(unu|doi|doua|trei|patru|cinci|sase|sapte|[1-7])\b/);
+    if (!match) return 0;
+    return NUMBERS[match[1]] || Number(match[1]);
+  }
+
+  function speak(text) {
+    voiceBox.textContent = text;
+    if (!window.speechSynthesis) return;
+    var utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'ro-RO';
+    utter.rate = 1;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+  }
+
+  function handleCommand(raw) {
+    var text = strip(raw);
+    if (!text) return;
+    voiceBox.textContent = 'Am auzit: ' + raw;
+    if (text.indexOf('ilie ') === 0) text = text.slice(5).trim();
+    if (!text || text === 'ilie') {
+      speak('Prezent.');
+      return;
+    }
+    var cameraNo = cameraFromPhrase(text);
+    if (cameraNo) {
+      var cam = CAMERAS[cameraNo - 1];
+      if (statusOf(cam) !== 'online') {
+        speak('Defectă.');
+        return;
+      }
+      openCamera(cam.id);
+      speak('Ok.');
+      return;
+    }
+    if (text === 'continua' || text.indexOf('continua ') === 0) {
+      seekForward();
+      speak('Ok.');
+      return;
+    }
+    voiceBox.textContent = 'Nu am înțeles. Spune: Ilie, Desfă camera 1…7, Continuă.';
+  }
+
+  function setListenUi() {
+    var listenBtn = document.getElementById('btn-listen');
+    var handsBtn = document.getElementById('btn-hands');
+    listenBtn.textContent = listening ? 'Oprește' : 'Apelează-l pe Ilie';
+    listenBtn.setAttribute('aria-pressed', listening ? 'true' : 'false');
+    handsBtn.setAttribute('aria-pressed', handsFree ? 'true' : 'false');
+  }
+
+  function ensureRecognition() {
+    var Ctor = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Ctor) return null;
+    if (recognition) return recognition;
+    recognition = new Ctor();
+    recognition.lang = 'ro-RO';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.onresult = function (event) {
+      var said = '';
+      for (var i = event.resultIndex; i < event.results.length; i += 1) {
+        if (event.results[i].isFinal) said += event.results[i][0].transcript;
+      }
+      if (said.trim()) handleCommand(said.trim());
+      if (!handsFree) stopListening();
+    };
+    recognition.onerror = function (event) {
+      if (event.error === 'aborted' || event.error === 'no-speech') return;
+      voiceBox.textContent = 'Microfon: ' + event.error;
+      if (event.error === 'not-allowed') stopListening();
+    };
+    recognition.onend = function () {
+      if (!listening) return;
+      if (!handsFree) {
+        listening = false;
+        setListenUi();
+        return;
+      }
+      window.setTimeout(function () {
+        if (!listening || !handsFree) return;
+        try { recognition.start(); } catch (err) {}
+      }, 250);
+    };
+    return recognition;
+  }
+
+  function startListening() {
+    var engine = ensureRecognition();
+    if (!engine) {
+      voiceBox.textContent = 'Recunoașterea vocală nu este disponibilă în acest browser. Poți scrie comanda mai jos.';
+      return;
+    }
+    engine.continuous = !!handsFree;
+    listening = true;
+    setListenUi();
+    try { engine.start(); } catch (err) {}
+    voiceBox.textContent = handsFree ? 'Hands-free pornit. Spune Ilie.' : 'Te ascult.';
+  }
+
+  function stopListening() {
+    listening = false;
+    setListenUi();
+    if (recognition) {
+      try { recognition.stop(); } catch (err) {}
+    }
+  }
+
+  document.addEventListener('click', function (event) {
+    var btn = event.target.closest('[data-action]');
+    if (!btn || btn.disabled) return;
+    var action = btn.getAttribute('data-action');
+    if (action === 'open-cam') openCamera(btn.getAttribute('data-id'));
+    if (action === 'toggle-cam') toggleCamera(btn.getAttribute('data-id'));
+    if (action === 'del-journal') {
+      var items = loadJournal();
+      items.splice(Number(btn.getAttribute('data-index')), 1);
+      localStorage.setItem('parc_journal', JSON.stringify(items));
+      renderJournal();
+    }
+    if (action === 'close-viewer') closeViewer();
+    if (action === 'continue-video') {
+      seekForward();
+      speak('Ok.');
+    }
+    if (action === 'run-text') handleCommand(document.getElementById('cmd-text').value);
+    if (action === 'listen') {
+      if (listening) stopListening();
+      else startListening();
+    }
+    if (action === 'hands-free') {
+      handsFree = !handsFree;
+      if (handsFree) startListening();
+      else stopListening();
+      setListenUi();
+    }
+  });
+
+  document.getElementById('viewer').addEventListener('click', function (event) {
+    if (event.target.id === 'viewer') closeViewer();
+  });
+
+  document.getElementById('journal-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    var desc = document.getElementById('inc-desc').value.trim();
+    if (!desc) return;
+    var items = loadJournal();
+    items.unshift({
+      tip: document.getElementById('inc-tip').value,
+      desc: desc,
+      tim: new Date().toLocaleString('ro-RO')
+    });
+    localStorage.setItem('parc_journal', JSON.stringify(items));
+    document.getElementById('inc-desc').value = '';
+    renderJournal();
+  });
+
+  document.addEventListener('input', function (event) {
+    var field = event.target.closest('[data-cam-name]');
+    if (!field) return;
+    var key = 'cam_name_' + field.getAttribute('data-cam-name');
+    if (field.value.trim()) localStorage.setItem(key, field.value.trim());
+    else localStorage.removeItem(key);
+  });
+
+  document.getElementById('cmd-text').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') handleCommand(event.target.value);
+  });
+
+  renderCameras();
+  renderGuide();
+  renderJournal();
+  setListenUi();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(function () {});
+  }
+})();
 </script>
 </body>
 </html>

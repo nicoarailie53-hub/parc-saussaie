@@ -1,9 +1,5 @@
-// Service Worker for Parc de la Saussaie PWA
-// Network-first strategy for all requests
+const CACHE_NAME = 'parc-saussaie-v18';
 
-const CACHE_NAME = 'parc-saussaie-v17';
-
-// Static assets to cache
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -19,86 +15,55 @@ const STATIC_ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Caching static assets');
-      return cache.addAll(STATIC_ASSETS);
-    }).catch((err) => {
-      console.warn('[SW] Some assets failed to cache:', err);
-    })
-  );
-  self.skipWaiting();
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    await Promise.all(STATIC_ASSETS.map(async (url) => {
+      try {
+        await cache.add(url);
+      } catch (err) {
+        console.warn('[SW] skip', url, err);
+      }
+    }));
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    })
-  );
-  self.clients.claim();
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name)));
+    await self.clients.claim();
+  })());
 });
 
 self.addEventListener('fetch', (event) => {
-  const { request } = event;
+  const request = event.request;
+  if (request.method !== 'GET') return;
+
   const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+  if (request.headers.has('range')) return;
+  if (url.pathname.endsWith('.mp4')) return;
 
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
-
-  // Skip cross-origin requests
-  if (url.origin !== self.location.origin) {
-    return;
-  }
-
-  // Network-first for index.html (most up-to-date experience)
-  if (request.mode === 'navigate' || url.pathname === './index.html') {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const cloned = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put('./index.html', cloned);
-            });
-          }
-          return response;
-        })
-        .catch(() => {
-          return caches.match('./index.html');
-        })
-    );
-    return;
-  }
-
-  // Network-first for media files
-  if (url.pathname.endsWith('.mp4') || url.pathname.endsWith('.jpg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.svg') || url.pathname.endsWith('.ico')) {
-    event.respondWith(
-      fetch(request).catch(() => {
-        return caches.match(request);
-      })
-    );
-    return;
-  }
-
-  // Cache-first for other static assets
-  event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
+  event.respondWith((async () => {
+    try {
+      const fresh = await fetch(request);
+      if (fresh && fresh.ok) {
+        const cache = await caches.open(CACHE_NAME);
+        cache.put(request, fresh.clone());
       }
-      return fetch(request).catch(() => {
-        if (request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-        return null;
+      return fresh;
+    } catch (err) {
+      const cached = await caches.match(request);
+      if (cached) return cached;
+      if (request.mode === 'navigate') {
+        const home = await caches.match('./index.html');
+        if (home) return home;
+      }
+      return new Response('Offline', {
+        status: 503,
+        headers: { 'Content-Type': 'text/plain; charset=UTF-8' }
       });
-    })
-  );
+    }
+  })());
 });
