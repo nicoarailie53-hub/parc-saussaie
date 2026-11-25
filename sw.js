@@ -1,4 +1,4 @@
-const CACHE_NAME = 'parc-saussaie-v18';
+﻿const CACHE_NAME = 'parc-saussaie-v19';
 
 const STATIC_ASSETS = [
   './',
@@ -67,3 +67,4 @@ self.addEventListener('fetch', (event) => {
     }
   })());
 });
+
