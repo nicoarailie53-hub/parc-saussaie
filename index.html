@@ -5,21 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1E4D3B">
 <meta name="description" content="Parcul de la Șosea - aplicatie de supraveghere si management">
-<title>Parcul de la Șosea</title>
+<title>Parcul de la Șosea — Asistent Ilie</title>
 <link rel="manifest" href="manifest.json">
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').then(reg => {
-      console.log('[PWA] Service Worker registered:', reg.scope);
-    }).catch(err => {
-      console.warn('[PWA] Service Worker registration failed:', err);
-    });
-  });
-}
-</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="media/societati/icon-512.png">
 <style>
+
 :root{
   --green:#1E4D3B;
   --green-2:#2A6B52;
@@ -52,6 +43,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 a{color:var(--green-2)}
 
+/* ---------- HEADER ---------- */
 .app-header{
   position:sticky;top:0;z-index:40;
   background:linear-gradient(135deg,var(--green) 0%,#163C2E 100%);
@@ -59,25 +51,47 @@ a{color:var(--green-2)}
   box-shadow:0 3px 14px rgba(0,0,0,.18);
 }
 .header-row{display:flex;align-items:center;gap:12px;max-width:1100px;margin:0 auto}
-.brand-mark{width:42px;height:42px;flex:none;border-radius:11px;background:var(--orange);display:grid;place-items:center;color:#fff;font-weight:800;font-size:19px;letter-spacing:-1px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
+.brand-mark{
+  width:42px;height:42px;flex:none;border-radius:11px;
+  background:var(--orange);display:grid;place-items:center;
+  color:#fff;font-weight:800;font-size:19px;letter-spacing:-1px;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);
+}
 .brand-text{flex:1;min-width:0}
 .brand-text h1{margin:0;font-size:17px;font-weight:750;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand-text p{margin:1px 0 0;font-size:11px;opacity:.75;letter-spacing:.7px;text-transform:uppercase}
 .header-actions{display:flex;gap:6px;flex:none}
-.hdr-btn{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:var(--cream);border-radius:9px;padding:8px 9px;font-size:11px;font-weight:650;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px}
+.hdr-btn{
+  border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);
+  color:var(--cream);border-radius:9px;padding:8px 9px;font-size:11px;font-weight:650;
+  display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px;
+}
 .hdr-btn:active{background:rgba(255,255,255,.2)}
 .hdr-btn svg{width:17px;height:17px}
 
+/* ---------- LAYOUT ---------- */
 .container{max-width:1100px;margin:0 auto;padding:14px}
+.tab-panel{display:none;animation:fade .2s ease}
+.tab-panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
-.card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:12px}
+/* ---------- COMPONENTS ---------- */
+.card{
+  background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:14px;margin-bottom:12px;
+}
 .card.flush{padding:0;overflow:hidden}
-.card-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--cream-2)}
+.card-head{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 14px;border-bottom:1px solid var(--border);background:var(--cream-2);
+}
 .card-head h2,.card-head h3{margin:0;font-size:14px;font-weight:750;letter-spacing:.2px}
 .card-head .spacer{flex:1}
 .card-body{padding:14px}
-
-.section-title{display:flex;align-items:center;gap:9px;margin:20px 2px 10px;font-size:12px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--green)}
+.section-title{
+  display:flex;align-items:center;gap:9px;margin:20px 2px 10px;
+  font-size:12px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--green);
+}
 .section-title:first-child{margin-top:4px}
 .section-title .bar{width:4px;height:16px;background:var(--orange);border-radius:2px}
 .section-title .count{margin-left:auto;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0;text-transform:none}
@@ -89,110 +103,1062 @@ a{color:var(--green-2)}
 @media(max-width:760px){.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
 
-/* Locatie - buton mare si clar */
-.map-section .map-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
-.map-section h2{font-size:16px;font-weight:800;letter-spacing:.2px;margin:0 0 10px;color:var(--green)}
-.map-section .map-card iframe{width:100%;height:380px;border:0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.map-section .map-card .map-meta{font-size:12px;color:var(--muted);margin-top:8px}
-.map-section .map-card .btn{margin-top:12px}
-.btn-large{width:100%;padding:14px 16px;font-size:16px;font-weight:750;border-radius:10px}
-
-/* Camere Supraveghere - casuta PIN */
-.pin-box{
-  background:var(--cream);border:2px solid var(--green);border-radius:var(--radius);
-  padding:18px;margin-bottom:12px;display:none;
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+input[type=text],input[type=date],input[type=time],input[type=tel],input[type=number],select,textarea{
+  width:100%;background:var(--white);border:1px solid var(--border);border-radius:9px;
+  padding:9px 10px;outline:none;min-height:40px;transition:border-color .15s,box-shadow .15s;
 }
-.pin-box.active{display:block}
-.pin-box h3{font-size:15px;font-weight:750;color:var(--green);margin:0 0 12px}
-.pin-box .pin-input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:20px;text-align:center;margin-bottom:8px;letter-spacing:2px}
-.pin-box .pin-input:focus{outline:none;border-color:var(--green)}
-.pin-box .error{color:var(--red);font-size:13px;margin-top:4px;display:none}
-.pin-box .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px;background:var(--paper);border-radius:var(--radius);border:1px solid var(--border);display:none}
-.pin-box .info-grid.active{display:grid}
-.pin-box .info-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
-.pin-box .info-item label{font-size:13px;color:var(--muted);font-weight:650}
-.pin-box .info-item .value{font-size:14px;font-weight:750;color:var(--text);word-break:break-all}
-.pin-box .btn-row{display:flex;gap:8px;flex-wrap:wrap}
-.pin-box .btn-primary{background:var(--green);color:var(--cream);border:none;padding:10px 16px;border-radius:8px;font-size:14px;font-weight:700;flex:1}
-.pin-box .btn-sm{padding:8px 12px;font-size:13px}
-.pin-box .hint{font-size:12px;color:var(--muted);margin-top:8px}
+textarea{resize:vertical;min-height:90px;line-height:1.5}
+input:focus,select:focus,textarea:focus{border-color:var(--green-3);box-shadow:0 0 0 3px rgba(62,135,104,.13)}
+input[readonly]{background:var(--cream-2);color:var(--muted)}
 
-.nav{display:flex;gap:6px;padding:10px;background:var(--cream-2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30}
-.nav-inner{display:flex;gap:4px}
-.nav-tab{background:var(--cream);padding:10px 14px;border-radius:8px 8px 0 0;cursor:pointer;border:none;font-size:13px;font-weight:650;display:flex;align-items:center;gap:8px;flex:1;position:relative}
-.nav-tab.active{background:var(--green);color:var(--cream)}
-.nav-tab svg{width:18px;height:18px}
-.nav-tab.active svg{width:19px;height:19px}
+.btn{
+  border:1px solid var(--border);background:var(--white);color:var(--text);
+  border-radius:9px;padding:9px 12px;font-size:12px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;
+  transition:transform .08s,background .15s;
+}
+.btn:active{transform:scale(.97)}
+.btn svg{width:15px;height:15px;flex:none}
+.btn-primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn-orange{background:var(--orange);border-color:var(--orange);color:#fff}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-ghost{background:transparent}
+.btn-sm{padding:6px 9px;min-height:32px;font-size:11px}
+.btn-block{width:100%}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
 
-@media (max-width:760px){
-  .grid-2,.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .pin-box .info-grid{grid-template-columns:1fr}
+.pill{
+  display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;
+  font-size:11px;font-weight:750;white-space:nowrap;border:1px solid transparent;
+}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.p-functional,.p-ok{background:#E7F3EC;color:#1B6B45;border-color:#C3E4D1}
+.p-defect,.p-blocked{background:var(--red-soft);color:var(--red);border-color:#EFC4BD}
+.p-maintenance,.p-adjust{background:var(--amber-soft);color:var(--amber);border-color:#EAD9A6}
+
+.status-select{padding:6px 8px;min-height:34px;font-size:11px;font-weight:700;border-radius:8px}
+
+.equip-card{
+  background:var(--white);border:1px solid var(--border);border-radius:12px;
+  padding:12px;display:flex;flex-direction:column;gap:9px;transition:border-color .15s;
+}
+.equip-card:hover{border-color:var(--green-3)}
+.equip-top{display:flex;align-items:flex-start;gap:8px}
+.equip-icon{
+  width:30px;height:30px;flex:none;border-radius:8px;background:var(--cream-2);
+  display:grid;place-items:center;color:var(--green);
+}
+.equip-icon svg{width:16px;height:16px}
+.equip-name{font-size:12.5px;font-weight:750;line-height:1.25;flex:1;min-width:0}
+.equip-meta{font-size:10.5px;color:var(--muted);margin-top:2px}
+.equip-foot{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:auto}
+.log-count{font-size:10.5px;color:var(--muted);font-weight:600}
+.logs{margin-top:4px;border-top:1px dashed var(--border);padding-top:8px;display:flex;flex-direction:column;gap:6px}
+.log-item{display:flex;gap:6px;align-items:flex-start;font-size:11px;background:var(--cream);border-radius:7px;padding:6px 7px}
+.log-item time{color:var(--muted);font-size:10px;white-space:nowrap;font-weight:650}
+.log-item span{flex:1;word-break:break-word}
+.item-sub svg{width:13px;height:13px;vertical-align:-2px;flex:none}
+.log-del{border:0;background:none;color:var(--muted);font-size:14px;line-height:1;padding:0 2px}
+.log-del:hover{color:var(--red)}
+.empty{font-size:11px;color:var(--muted);font-style:italic}
+
+.level-card{border:1px solid var(--border);border-radius:12px;background:var(--white);overflow:hidden}
+.level-head{
+  display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--cream-2);
+  border-bottom:1px solid var(--border);
+}
+.level-head strong{font-size:13px}
+.lot{padding:10px 12px;border-bottom:1px dashed var(--border)}
+.lot:last-of-type{border-bottom:0}
+.lot-label{font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--green-2);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.lot-label .area{background:var(--cream-2);border-radius:5px;padding:1px 6px;color:var(--muted);letter-spacing:0;font-weight:700}
+.panels{padding:10px 12px;background:var(--cream);border-top:1px solid var(--border)}
+.panels-title{font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--muted);margin-bottom:8px}
+.panel-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.panel-item{display:flex;align-items:center;gap:6px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:6px 7px}
+.panel-item span{font-size:10.5px;font-weight:750;white-space:nowrap}
+.panel-item .status-select{margin-left:auto;width:100%;min-width:0}
+
+.acti-card{border:1px solid var(--border);border-radius:12px;background:var(--white);overflow:hidden}
+.acti-head{padding:11px 12px;background:linear-gradient(100deg,var(--green),var(--green-2));color:#fff;display:flex;align-items:center;gap:8px}
+.acti-head strong{font-size:14px;letter-spacing:.5px}
+.acti-head .spacer{flex:1}
+.acti-head .spec{font-size:10px;background:rgba(255,255,255,.15);padding:3px 7px;border-radius:6px;font-weight:700}
+.acti-body{padding:12px;display:flex;flex-direction:column;gap:10px}
+.door-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.door{border:1px solid var(--border);border-radius:9px;padding:8px;background:var(--cream);text-align:center}
+.door .d-name{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:5px}
+.door .d-dim{font-size:9px;color:var(--muted);margin-top:4px}
+.door .status-select{font-size:10px;padding:5px 2px;width:100%}
+
+.alert{
+  border-radius:11px;padding:11px 13px;font-size:12.5px;font-weight:650;
+  display:flex;gap:9px;align-items:center;border:1px solid transparent;margin-bottom:11px;
+}
+.alert svg{width:18px;height:18px;flex:none}
+.alert-red{background:var(--red-soft);border-color:#EFC4BD;color:#8E2A1E}
+.alert-orange{background:var(--orange-soft);border-color:#F3D2B6;color:#A54A12}
+.alert-green{background:#E7F3EC;border-color:#C3E4D1;color:#1B6B45}
+.alert-blue{background:#E8F0F7;border-color:#C9DDEE;color:#245A80}
+
+.report-out{
+  white-space:pre-wrap;word-break:break-word;background:#1B2A22;color:#D9EADF;
+  border-radius:11px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:11.5px;line-height:1.55;max-height:340px;overflow:auto;
+}
+.check-list{display:flex;flex-direction:column;gap:7px}
+.check-item{
+  display:flex;align-items:center;gap:10px;padding:10px 11px;border:1px solid var(--border);
+  border-radius:10px;background:var(--white);cursor:pointer;min-height:46px;
+}
+.check-item input{width:19px;height:19px;accent-color:var(--green);flex:none}
+.check-item span{font-size:12.5px;font-weight:650;flex:1}
+.check-item.done{background:#E7F3EC;border-color:#C3E4D1}
+.check-item.done span{text-decoration:line-through;color:var(--muted)}
+
+.item-row{
+  display:flex;gap:9px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed var(--border);
+}
+.item-row:last-child{border-bottom:0}
+.item-main{flex:1;min-width:0}
+.item-title{font-size:12.5px;font-weight:750;word-break:break-word}
+.item-sub{font-size:11px;color:var(--muted);margin-top:3px;word-break:break-word}
+.item-side{display:flex;gap:5px;flex:none;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.icon-btn{
+  width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--white);
+  display:grid;place-items:center;padding:0;flex:none;
+}
+.icon-btn svg{width:15px;height:15px}
+.icon-btn:hover{border-color:var(--green-3)}
+.icon-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.icon-btn.green{background:var(--green);border-color:var(--green);color:#fff}
+.icon-btn.green:hover{background:var(--green-2)}
+
+.cam-card{border:1px solid var(--border);border-radius:12px;background:var(--white);overflow:hidden}
+.cam-head{padding:10px 11px;background:var(--cream-2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.cam-head .cam-dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(185,58,43,.15);flex:none}
+.cam-head strong{font-size:12px;flex:1}
+.cam-body{padding:11px;display:flex;flex-direction:column;gap:8px}
+.lens{border:1px dashed var(--border);border-radius:9px;padding:8px;background:var(--cream)}
+.lens-title{font-size:10px;font-weight:800;color:var(--green-2);letter-spacing:.5px;margin-bottom:6px}
+.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
+.shot{position:relative;aspect-ratio:1;border-radius:7px;overflow:hidden;background:var(--cream-2)}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot button{position:absolute;top:2px;right:2px;width:19px;height:19px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:1;display:grid;place-items:center;padding:0}
+
+.agent-card{border:1px solid var(--border);border-radius:12px;background:var(--white);padding:11px;display:flex;flex-direction:column;gap:8px}
+.agent-top{display:flex;align-items:center;gap:9px}
+.agent-avatar{width:36px;height:36px;border-radius:10px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.agent-info{flex:1;min-width:0}
+.agent-info strong{font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agent-info small{font-size:10.5px;color:var(--muted);display:block}
+.tag{display:inline-block;background:var(--cream-2);border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-size:10px;font-weight:700;color:var(--green-2)}
+.call-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#1B8A4B;color:#fff;
+  border-radius:9px;padding:9px 11px;font-weight:750;font-size:12px;text-decoration:none;min-height:40px;
+}
+.call-btn svg{width:15px;height:15px}
+
+.weather-hero{
+  border-radius:16px;padding:20px;color:#fff;
+  background:linear-gradient(135deg,var(--green) 0%,#163C2E 100%);
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.weather-hero.alert{background:linear-gradient(135deg,#9B2E22,#B93A2B)}
+.weather-icon{font-size:44px;line-height:1}
+.weather-main{flex:1;min-width:140px}
+.weather-temp{font-size:34px;font-weight:800;line-height:1.05}
+.weather-desc{font-size:12px;opacity:.85;text-transform:capitalize}
+.weather-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;margin-top:6px}
+.wstat{background:rgba(255,255,255,.12);border-radius:10px;padding:9px 11px}
+.wstat b{display:block;font-size:17px}
+.wstat span{font-size:10px;opacity:.8;text-transform:uppercase;letter-spacing:.6px}
+
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:var(--green);border-top:1px solid rgba(255,255,255,.12);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  box-shadow:0 -4px 18px rgba(0,0,0,.2);
+}
+.nav-inner{display:grid;grid-template-columns:repeat(5,1fr);max-width:1100px;margin:0 auto;height:var(--nav-h)}
+.nav-tab{
+  border:0;background:none;color:rgba(255,255,255,.62);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;padding:4px 2px;position:relative;
+}
+.nav-tab svg{width:21px;height:21px;flex:none}
+.nav-tab span{font-size:9.5px;font-weight:700;line-height:1.1;text-align:center}
+.nav-tab.active{color:#fff}
+.nav-tab.active::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;background:var(--orange);border-radius:0 0 3px 3px}
+.nav-tab.active svg{color:var(--orange)}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(var(--nav-h) + 20px);transform:translateX(-50%) translateY(20px);
+  background:#1B2A22;color:#fff;padding:10px 16px;border-radius:10px;font-size:12px;font-weight:650;
+  z-index:90;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 6px 20px rgba(0,0,0,.3);
+  max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.modal{position:fixed;inset:0;background:rgba(12,28,20,.55);z-index:100;display:none;align-items:center;justify-content:center;padding:14px}
+.modal.open{display:flex}
+.modal-card{background:var(--paper);border-radius:16px;width:100%;max-width:480px;max-height:90vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.modal-head{padding:15px 16px;border-bottom:1px solid var(--border);font-weight:800;font-size:15px;color:var(--green)}
+.modal-body{padding:16px;display:flex;flex-direction:column;gap:12px}
+.modal-foot{padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.hint{font-size:11px;color:var(--muted);line-height:1.45}
+.divider{height:1px;background:var(--border);margin:4px 0}
+.badge-today{background:var(--orange);color:#fff;border-radius:5px;padding:1px 5px;font-size:9px;font-weight:800;letter-spacing:.4px}
+.badge-tomorrow{background:var(--amber);color:#fff;border-radius:5px;padding:1px 5px;font-size:9px;font-weight:800;letter-spacing:.4px}
+.recording{animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.4}}
+.nowrap{white-space:nowrap}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px}
+@media print{.nav,.app-header,.btn,.icon-btn{display:none!important}body{padding:0}.tab-panel{display:block!important}}
+
+/* ===== Voice Assistant Ilie Styles ===== */
+.assistant-stage {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 200;
+  background: linear-gradient(180deg, #1E4D3B 0%, #163C2E 100%);
+  border-top: 4px solid #E8712A;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.3);
+  margin: 0;
+  padding: 0 0 16px 0;
+}
+
+.assistant-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(30, 77, 59, 0.95);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.assistant-toolbar .brand {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.assistant-toolbar .brand .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22C55E;
+  animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.assistant-toolbar .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.assistant-toolbar .btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.assistant-toolbar .btn:hover { background: rgba(255,255,255,0.22); }
+.assistant-toolbar .btn.active { background: #E8712A; border-color: #E8712A; }
+.assistant-toolbar .btn.primary { background: #22C55E; border-color: #22C55E; }
+.assistant-toolbar .btn.danger { background: #B93A2B; border-color: #B93A2B; }
+
+.call-btn {
+  background: #E8712A !important;
+  border-color: #E8712A !important;
+  color: #fff !important;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.call-btn:hover { background: #D96A1A; }
+
+.assistant-card {
+  background: rgba(20, 40, 30, 0.92);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  margin: 8px 12px 10px;
+  padding: 12px 14px;
+  max-width: 100%;
+}
+
+.assistant-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.assistant-card .card-header .icon { font-size: 20px; }
+.assistant-card .card-header .name { font-size: 15px; font-weight: 800; color: #fff; }
+.assistant-card .card-header .label {
+  font-size: 10px;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.assistant-card .voice-text {
+  font-size: 14px;
+  color: #E0F2FE;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.assistant-card .voice-text.dark { color: #F1F5F9; }
+
+.assistant-input {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+}
+
+.assistant-input input {
+  flex: 1;
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  outline: none;
+  padding: 4px 0;
+}
+
+.assistant-input input::placeholder { color: #64748B; }
+
+/* Video player styles */
+.video-player-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  margin: 8px 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.video-player-container video {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+}
+
+.video-player-container .controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.85));
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.video-player-container:hover .controls,
+.video-player-container .controls.show {
+  opacity: 1;
+}
+
+.video-player-container .controls .time {
+  color: #fff;
+  font-size: 13px;
+  font-family: monospace;
+  min-width: 80px;
+}
+
+.video-player-container .controls .controls-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.video-player-container .controls .btn-icon {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.video-player-container .controls .btn-icon:active { background: rgba(255,255,255,0.25); }
+
+.video-player-container .controls .time-input {
+  width: 60px;
+  padding: 4px 6px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.video-player-container .video-info {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  background: rgba(0,0,0,0.3);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.video-player-container .video-info .video-name { color: #fff; font-size: 13px; font-weight: 600; }
+.video-player-container .video-info .video-meta { color: #94A3B8; font-size: 11px; }
+
+/* Main content */
+.tab-container { margin-top: 12px; }
+
+.emergency-bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.25);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.emergency-bar .vol-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.emergency-bar .vol-bars .bar {
+  width: 12px;
+  height: 8px;
+  border-radius: 2px;
+  background: #475569;
+  transition: height 0.2s;
+}
+
+.emergency-bar .vol-bars .bar.active { background: #22C55E; height: 20px; }
+
+.emergency-bar .jumps {
+  display: flex;
+  gap: 6px;
+}
+
+.emergency-bar .jumps button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 50px;
+  text-align: center;
+}
+
+.emergency-bar .jumps button:hover { background: rgba(255,255,255,0.2); }
+.emergency-bar .jumps button:focus { outline: 2px solid #22C55E; }
+
+.tab-header {
+  background: linear-gradient(135deg, #1E4D3B, #163C2E);
+  padding: 12px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 2px solid rgba(255,255,255,0.08);
+}
+
+.tab-header .brand-2 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tab-header .tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: 12px;
+}
+
+.tab-header .tab {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-header .tab.active {
+  background: #E8712A;
+  border-color: #E8712A;
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(232, 113, 42, 0.3);
+}
+
+.tab-header .tab:hover:not(.active) { background: rgba(255,255,255,0.12); }
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.response-history {
+  max-height: 150px;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 8px;
+}
+
+.response-history .item {
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #E0F2FE;
+  border-left: 3px solid #22C55E;
+}
+
+.response-history .item.system { color: #94A3B8; border-left-color: #F59E0B; }
+
+.media-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+
+.media-card video, .media-card img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+
+.media-card .media-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.media-card .media-head h3 { margin: 0; font-size: 15px; color: var(--green); }
+
+.media-card .media-head .emoji { font-size: 22px; }
+
+.media-card .controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.media-card .controls .btn-small {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--cream-2);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.media-card .controls .btn-small.active {
+  background: var(--green);
+  color: var(--cream);
+  border-color: var(--green);
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 768px) { .media-grid { grid-template-columns: 1fr 1fr; } }
+
+.sit-section { margin-bottom: 20px; }
+
+.round-form {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.round-form .field { margin-bottom: 12px; }
+.round-form label { font-size: 13px; font-weight: 600; color: var(--muted); }
+.round-form input, .round-form select, .round-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--paper);
+}
+
+.camera-grid { display: grid; gap: 12px; }
+.camera-item {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.camera-item .camera-head {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cream-2);
+}
+
+.camera-item .camera-head h3 { margin: 0; font-size: 14px; color: var(--green); }
+.camera-item .camera-head .cam-id {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.camera-item .camera-body { padding: 10px 12px; }
+.camera-item .camera-body video {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  background: #000;
+}
+
+/* Map */
+.map-section .map-card iframe {
+  width: 100%;
+  height: 400px;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+/* Iniciere video */
+.video-init {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--cream-2);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+}
+
+.video-init .video-btn {
+  flex: 1;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.video-init .video-btn:hover { border-color: var(--green); }
+
+@media (max-width: 760px) {
+  .media-grid { grid-template-columns: 1fr; }
+  .tab-header .tabs { gap: 4px; }
+  .tab-header .tab { padding: 8px 12px; font-size: 11px; }
 }
 </style>
 </head>
 <body>
-<header class="app-header">
-  <div class="header-row">
-    <div class="brand-mark">&#127968;</div>
-    <div class="brand-text">
-      <h1>Parcul de la Șosea</h1>
-      <p>Supraveghere &amp; management</p>
+
+<!-- ===== Voice Assistant Ilie — Always visible on screen ===== -->
+<div class="assistant-stage" id="assistantStage">
+  <div class="assistant-toolbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <span id="assistantName">Ilie</span>
     </div>
-    <div class="header-actions">
-      <a class="hdr-btn" href="https://maps.app.goo.gl/azapHJWFIZPCjhmHA?g_st=aw" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        Harta localizare
-      </a>
+    <button class="btn call-btn" id="callButton">🎙️ Apelează-l pe Ilie</button>
+    <div class="buttons">
+      <button class="btn" id="btnPause" title="Pauză video">⏸️ Pauză</button>
+      <button class="btn" id="btnStop" title="Oprește video">⏹️ Oprește</button>
+      <button class="btn" id="btnPrev" title="Înapoi (-5s)">⏪ Înapoi</button>
+      <button class="btn" id="btnNext" title="Continuă (+5s)">⏩ Continuă</button>
     </div>
+  </div>
+
+  <div class="assistant-card" id="assistantCard">
+    <div class="card-header">
+      <span class="icon">🎙️</span>
+      <span class="name">Asistent Ilie</span>
+      <span class="label">Sistem de tarășire vocală</span>
+    </div>
+    <div class="voice-text" id="voiceOutput">Bună! Spune-mi când dorești să vezi ce s-a întâmplat pe ecran.</div>
+    <div class="assistant-input">
+      <input type="text" id="voiceInput" placeholder="Scrie căutarea... (ex: 2:00, Etaj 1, RDC...)" maxlength="200">
+      <button class="btn" id="sendBtn">●</button>
+    </div>
+    <div class="response-history" id="responseHistory"></div>
+  </div>
+
+  <div class="emergency-bar" id="emergencyBar" style="display:none;">
+    <div class="vol-bars">
+      <div class="bar" id="volBar1"></div>
+      <div class="bar" id="volBar2"></div>
+      <div class="bar" id="volBar3"></div>
+    </div>
+    <div class="jumps">
+      <button id="jumpFwd">⏩ +5s</button>
+      <button id="jumpBack">⏪ -5s</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Main Dashboard with Tabs ===== -->
+<header class="tab-header">
+  <div class="brand-2">
+    <svg width="28" height="28" viewBox="0 0 64 64">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#F59E0B"/>
+          <stop offset="1" stop-color="#D97706"/>
+        </linearGradient>
+      </defs>
+      <circle cx="32" cy="32" r="22" fill="none" stroke="#F59E0B" stroke-width="3"/>
+      <g fill="#F59E0B">
+        <ellipse cx="32" cy="10" rx="14" ry="10"/>
+        <ellipse cx="32" cy="54" rx="14" ry="10"/>
+        <ellipse cx="10" cy="32" rx="14" ry="10"/>
+        <ellipse cx="54" cy="32" rx="14" ry="10"/>
+      </g>
+      <g fill="#059669">
+        <ellipse cx="32" cy="18" rx="11" ry="8"/>
+        <ellipse cx="32" cy="46" rx="11" ry="8"/>
+        <ellipse cx="18" cy="32" rx="11" ry="8"/>
+        <ellipse cx="46" cy="32" rx="11" ry="8"/>
+      </g>
+      <circle cx="32" cy="32" r="10" fill="#1E3A8A"/>
+      <circle cx="32" cy="32" r="6" fill="#F59E0B"/>
+      <circle cx="32" cy="32" r="3" fill="#059669"/>
+    </svg>
+    <span>Parcul de la Șosea — Asistent Ilie</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-tab="voice">🎙️ Asistent Ilie</button>
+    <button class="tab" data-tab="sit">Sit &amp; Hartă</button>
+    <button class="tab" data-tab="arcade">Arcade &amp; Video</button>
+    <button class="tab" data-tab="rond">Rond &amp; Puncte</button>
+    <button class="tab" data-tab="cameras">Supraveghere Camere</button>
   </div>
 </header>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <button class="nav-tab active" data-tab="cameras">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-3v10l-6-3z"/></svg>
-      <span>Camere</span>
-    </button>
-    <button class="nav-tab" data-tab="map">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 3 22 3 22 21 1 21z" fill="#1E4D3B" stroke="none"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg>
-      <span>Harta localizare</span>
-    </button>
+<div class="tab-container">
+  <!-- ====== TAB 1: Asistent Ilie ====== -->
+  <div class="tab-content active" id="tab-voice">
+    <div style="max-width:600px;margin:12px auto;">
+      <div id="assistantStage">
+        <div class="assistant-toolbar">
+          <div class="brand">
+            <span class="dot"></span>
+            <span id="assistantName">Ilie</span>
+          </div>
+          <button class="btn call-btn" id="callButton">🎙️ Apelează-l pe Ilie</button>
+          <div class="buttons">
+            <button class="btn" id="btnPause">⏸️ Pauză</button>
+            <button class="btn" id="btnStop">⏹️ Oprește</button>
+            <button class="btn" id="btnPrev">⏪ Înapoi</button>
+            <button class="btn" id="btnNext">⏩ Continuă</button>
+          </div>
+        </div>
+        <div class="assistant-card" id="assistantCard">
+          <div class="card-header">
+            <span class="icon">🎙️</span>
+            <span class="name">Asistent Ilie</span>
+            <span class="label">Sistem de tarășire vocală</span>
+          </div>
+          <div class="voice-text" id="voiceOutput">Bună! Spune-mi când dorești să vezi ce s-a întâmplat.</div>
+          <div class="assistant-input">
+            <input type="text" id="voiceInput" placeholder="Scrie căutarea... (ex: 2:00, Etaj 1, RDC...)" maxlength="200">
+            <button class="btn" id="sendBtn">●</button>
+          </div>
+          <div class="response-history" id="responseHistory"></div>
+        </div>
+        <div class="emergency-bar" id="emergencyBar" style="display:none;">
+          <div class="vol-bars">
+            <div class="bar" id="volBar1"></div>
+            <div class="bar" id="volBar2"></div>
+            <div class="bar" id="volBar3"></div>
+          </div>
+          <div class="jumps">
+            <button id="jumpFwd">⏩ +5s</button>
+            <button id="jumpBack">⏪ -5s</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</nav>
 
-<main class="container">
-  <!-- Secțiune Hartă localizare -->
-  <section class="tab-panel active" id="tab-map">
+  <!-- ====== TAB 2: Sit & Hartă ====== -->
+  <div class="tab-content" id="tab-sit">
     <div class="map-section">
-      <div class="card map-card">
+      <div class="map-card">
         <h2>&#127968; Harta Parcul de la Șosea</h2>
+        <!-- Keyless OpenStreetMap embed -->
         <iframe
-          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCW4WUUBpyk6vEXrZc0q-6W69I8ikq3wLk&q=Parcul+de+la+Saussaie,+France"
-          width="100%" height="500" frameborder="0" style="border:0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)"
-          allowfullscreen loading="lazy"></iframe>
-        <p class="map-meta">📍 <strong>Parcul de la Șosea</strong> &mdash; Franța.</p>
-        <a href="https://maps.app.goo.gl/azapHJWFIZPCjhmHA?g_st=aw" target="_blank" rel="noopener" class="btn btn-primary btn-large">
-          &#127968; Deschide în Google Maps
+          src="https://www.openstreetmap.org/export/embed.html?bbox=5.98%2C48.76%2C6.02%2C48.79&amp;layer=mapnik&amp;marker=48.7745%2C2.3536"
+          width="100%" height="400" frameborder="0" style="border:0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)"></iframe>
+        <div class="map-meta">
+          <p>📍 <strong>Parcul de la Șosea</strong> &mdash; Franța (Chevilly-Larue)</p>
+          <p class="hint" style="margin:4px 0 0;">Coordonate: 48.7745° N, 2.3536° E</p>
+        </div>
+        <a href="https://www.openstreetmap.org/?mlat=48.7745&amp;mlon=2.3536#map=15/48.7745/2.3536" target="_blank" rel="noopener" class="btn btn-primary btn-large">
+          &#127968; Deschide în OpenStreetMap
         </a>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Secțiune Camere Supraveghere -->
-  <section class="tab-panel" id="tab-cameras">
+  <!-- ====== TAB 3: Arcade & Video ====== -->
+  <div class="tab-content" id="tab-arcade">
+    <div class="section-title"><span class="bar"></span>Arcade &amp; Video — 4 poșe prin care trece video</div>
+    <div class="media-grid">
+      <div class="media-card">
+        <div class="media-head">
+          <span class="emoji">🍿</span>
+          <h3>Arcade — RDC (Parter)</h3>
+        </div>
+        <video id="video-rdc" controls playsinline preload="metadata" poster="media/societati/arcade-rdc-escc.jpg">
+          <source src="media/societati/arcade-rdc-escc.mp4" type="video/mp4">
+          Browserul tău nu suportă video.
+        </video>
+        <div class="controls">
+          <span class="time" id="rdcTime">00:00 / 00:00</span>
+          <div class="controls-row">
+            <button class="btn-icon" onclick="videoRDC.currentTime=0" title="Repornește">⏮️</button>
+            <button class="btn-icon" onclick="videoRDC.play()" title="Redă">▶️</button>
+            <button class="btn-icon" onclick="videoRDC.pause()" title="Pauză">⏸️</button>
+            <button class="btn-icon" onclick="videoRDC.currentTime=videoRDC.currentTime+5" title="Continuă +5s">⏩</button>
+            <button class="btn-icon" onclick="videoRDC.currentTime=Math.max(0,videoRDC.currentTime-5)" title="Înapoi -5s">⏪</button>
+            <span class="time-input" id="rdcTimeInput">00:00</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <span class="video-name">Arcade RDC — ESCC</span>
+          <span class="video-meta">6.37 MB · MP4</span>
+        </div>
+      </div>
+
+      <div class="media-card">
+        <div class="media-head">
+          <span class="emoji">🎮</span>
+          <h3>Arcade — Etaj 1</h3>
+        </div>
+        <video id="video-e1" controls playsinline preload="metadata" poster="media/societati/arcade-etaj1-escc.jpg">
+          <source src="media/societati/arcade-etaj1-escc.mp4" type="video/mp4">
+          Browserul tău nu suportă video.
+        </video>
+        <div class="controls">
+          <span class="time" id="e1Time">00:00 / 00:00</span>
+          <div class="controls-row">
+            <button class="btn-icon" onclick="videoE1.currentTime=0" title="Repornește">⏮️</button>
+            <button class="btn-icon" onclick="videoE1.play()" title="Redă">▶️</button>
+            <button class="btn-icon" onclick="videoE1.pause()" title="Pauză">⏸️</button>
+            <button class="btn-icon" onclick="videoE1.currentTime+=5" title="Continuă +5s">⏩</button>
+            <button class="btn-icon" onclick="videoE1.currentTime-=5" title="Înapoi -5s">⏪</button>
+            <span class="time-input" id="e1TimeInput">00:00</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <span class="video-name">Arcade Etaj 1 — ESCC</span>
+          <span class="video-meta">9.33 MB · MP4</span>
+        </div>
+      </div>
+
+      <div class="media-card">
+        <div class="media-head">
+          <span class="emoji">🎮</span>
+          <h3>Arcade — Etaj 2</h3>
+        </div>
+        <video id="video-e2" controls playsinline preload="metadata" poster="media/societati/arcade-etaj2-comun.mp4">
+          <source src="media/societati/arcade-etaj2-comun.mp4" type="video/mp4">
+          Browserul tău nu suportă video.
+        </video>
+        <div class="controls">
+          <span class="time" id="e2Time">00:00 / 00:00</span>
+          <div class="controls-row">
+            <button class="btn-icon" onclick="videoE2.currentTime=0" title="Repornește">⏮️</button>
+            <button class="btn-icon" onclick="videoE2.play()" title="Redă">▶️</button>
+            <button class="btn-icon" onclick="videoE2.pause()" title="Pauză">⏸️</button>
+            <button class="btn-icon" onclick="videoE2.currentTime+=5" title="Continuă +5s">⏩</button>
+            <button class="btn-icon" onclick="videoE2.currentTime-=5" title="Înapoi -5s">⏪</button>
+            <span class="time-input" id="e2TimeInput">00:00</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <span class="video-name">Arcade Etaj 2 — Comun</span>
+          <span class="video-meta">9.33 MB · MP4</span>
+        </div>
+      </div>
+
+      <div class="media-card">
+        <div class="media-head">
+          <span class="emoji">🏢</span>
+          <h3>Arcade — Etaj 2 (Centrul Ousswa)</h3>
+        </div>
+        <video id="video-c" controls playsinline preload="metadata" poster="media/societati/arcade-etaj2-centre-ousswa.jpg">
+          <source src="media/societati/arcade-etaj2-comun.mp4" type="video/mp4">
+          <source src="media/societati/arcade-etaj2-comun.mp4" type="video/mp4">
+          Browserul tău nu suportă video.
+        </video>
+        <div class="controls">
+          <span class="time" id="cTime">00:00 / 00:00</span>
+          <div class="controls-row">
+            <button class="btn-icon" onclick="videoC.currentTime=0" title="Repornește">⏮️</button>
+            <button class="btn-icon" onclick="videoC.play()" title="Redă">▶️</button>
+            <button class="btn-icon" onclick="videoC.pause()" title="Pauză">⏸️</button>
+            <button class="btn-icon" onclick="videoC.currentTime+=5" title="Continuă +5s">⏩</button>
+            <button class="btn-icon" onclick="videoC.currentTime-=5" title="Înapoi -5s">⏪</button>
+            <span class="time-input" id="cTimeInput">00:00</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <span class="video-name">Arcade Etaj 2 — Centre Ousswa</span>
+          <span class="video-meta">247 KB · JPG</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 4: Rond & Puncte ====== -->
+  <div class="tab-content" id="tab-rond">
+    <div class="round-form">
+      <div class="field">
+        <label for="round-date">Dată constatare</label>
+        <input type="date" id="round-date">
+      </div>
+      <div class="field">
+        <label for="round-time">Oră constatare</label>
+        <input type="time" id="round-time">
+      </div>
+      <div class="field">
+        <label for="round-zone">Zonă / Echipament</label>
+        <select id="round-zone">
+          <option value="gate-pc1">Poarta Culisantă #1</option>
+          <option value="gate-pc2">Poarta Culisantă #2</option>
+          <option value="gate-pc3">Poarta Culisantă #3</option>
+          <option value="level-SS">Clădire – Subsol (SS)</option>
+          <option value="level-RDC">Clădire – Parter (RDC)</option>
+          <option value="level-E1">Clădire – Etaj 1</option>
+          <option value="level-E2">Clădire – Etaj 2</option>
+          <option value="level-E3">Clădire – Etaj 3</option>
+          <option value="level-E4">Clădire – Etaj 4</option>
+          <option value="elevator-1">Ascensor #1</option>
+          <option value="elevator-2">Ascensor #2</option>
+          <option value="acti-1">ACTI 1</option>
+          <option value="acti-2">ACTI 2</option>
+          <option value="acti-3">ACTI 3</option>
+          <option value="acti-4">ACTI 4</option>
+          <option value="arcade-rdc">Bâtiment Arcade – RDC</option>
+          <option value="arcade-e1">Bâtiment Arcade – Etaj 1</option>
+          <option value="arcade-e2">Bâtiment Arcade – Etaj 2</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="round-observation">Constatare / Observație</label>
+        <textarea id="round-observation" rows="3" placeholder="Descrieți constatarea în română…"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" data-action="save-round">Salvează constatarea</button>
+      </div>
+    </div>
+    <div class="response-history" id="roundHistory"></div>
+  </div>
+
+  <!-- ====== TAB 5: Supraveghere Camere ====== -->
+  <div class="tab-content" id="tab-cameras">
     <div class="card">
       <div class="card-body">
         <div class="btn-row">
           <button class="btn btn-primary btn-large" id="open-pin-btn">&#128273; Acces Camere</button>
         </div>
-        <p class="hint" style="margin:9px 0 0">Supraveghere IP (Dahua/IMOU P2P). Introduceți codul PIN pentru a vedea datele camerei.</p>
+        <p class="hint">Supraveghere IP (Dahua/IMOU P2P). Date de acces configurate în mod intern.</p>
       </div>
     </div>
 
-    <!-- Căsuța PIN -->
+    <!-- PIN Box -->
     <div class="pin-box" id="pin-box">
       <h3>&#128273; Cod PIN</h3>
-      <input type="password" class="pin-input" id="pin-input" maxlength="4" placeholder="&#9679;&#9679;&#9679;&#9679;" autocomplete="off">
+      <input type="password" class="pin-input" id="pin-input" maxlength="4" placeholder="●●●●" autocomplete="off">
       <div class="error" id="pin-error">Cod incorect. Încercați din nou.</div>
       <div class="info-grid" id="cam-info">
         <div class="info-item"><label>Model / Sistem:</label><span class="value">NVR / Cameră IP (Dahua/IMOU P2P)</span></div>
@@ -205,152 +1171,478 @@ a{color:var(--green-2)}
         <button class="btn-primary" id="copy-sn-btn">&#128203; Copiază SN</button>
         <button class="btn-primary" id="show-pass-btn">Arată parola</button>
       </div>
-      <p class="hint" style="margin:10px 0 0;">Datele sunt afișate doar după introducerea codului PIN. Parola nu este expusă în fișierele publice.</p>
+      <p class="hint" style="margin:10px 0 0;">Datele sunt afișate doar după introducerea codului PIN.</p>
     </div>
-  </section>
-</main>
 
-<div id="pin-modal"></div>
+    <!-- Camera Grid -->
+    <div class="camera-grid">
+      <div class="camera-item">
+        <div class="camera-head">
+          <span class="cam-id">CH1</span>
+          <h3>Zona A — DMSS Dahua</h3>
+        </div>
+        <div class="camera-body">
+          <video id="camA" controls playsinline preload="metadata">
+            <source src="media/societati/arcade-rdc-escc.mp4" type="video/mp4">
+          </video>
+          <p class="hint">CH1–CH7 + Cameră Dublă (Dahua) — acces cu PIN</p>
+        </div>
+      </div>
+      <div class="camera-item">
+        <div class="camera-head">
+          <span class="cam-id">CH2</span>
+          <h3>Zona B — Imou Franța</h3>
+        </div>
+        <div class="camera-body">
+          <video id="camB" controls playsinline preload="metadata">
+            <source src="media/societati/arcade-rdc-escc.mp4" type="video/mp4">
+          </video>
+          <p class="hint">Fix + PTZ Mobil — acces cu PIN</p>
+        </div>
+      </div>
+      <div class="camera-item">
+        <div class="camera-head">
+          <span class="cam-id">CH3</span>
+          <h3>Zona C — România (Imou)</h3>
+        </div>
+        <div class="camera-body">
+          <video id="camC" controls playsinline preload="metadata">
+            <source src="media/societati/arcade-rdc-escc.mp4" type="video/mp4">
+          </video>
+          <p class="hint">Cam 1–3 — acces cu PIN</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="assistantOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;">
+  <div style="background:#1E4D3B;border-radius:16px;padding:24px;text-align:center;max-width:500px;width:90%;color:#fff;">
+    <h2 style="margin:0 0 12px;font-size:20px;">🎙️ Apelează-l pe Ilie</h2>
+    <p style="margin:0 0 16px;font-size:14px;">Spune ceva sau scrie o comandă...</p>
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:400px;">
+      <input type="text" id="assistantCmd" placeholder="Ex: 2:00, Etaj 1, RDC..." style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;outline:none;">
+      <button id="assistantSend" style="padding:10px 20px;border-radius:8px;background:#E8712A;color:#fff;font-weight:700;cursor:pointer;border:none;">●</button>
+    </div>
+    <p style="margin-top:12px;font-size:11px;color:#94A3B8;">Spune: "Ilie, uită-te pe cameră la 2:00" sau alege o poziție</p>
+  </div>
+</div>
 
 <script>
-// Codul PIN (implicit 1234)
-const PIN_CODE = '1234';
+// ===== Voice Assistant Ilie =====
+const assistant = {
+  recognition: null,
+  isListening: false,
+  isPaused: false,
+  currentVideo: null,
+  currentVideoName: '',
+  videoTime: 0,
+  waitingForTime: false,
+  timeOffset: null,
+  init() {
+    // Speech Recognition setup
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRec) {
+      this.recognition = new SpeechRec();
+      this.recognition.continuous = true;
+      this.recognition.interimResults = false;
+      this.recognition.lang = 'ro-RO';
+      this.recognition.maxAlternatives = 3;
+      this.setupSpeechListeners();
+    } else {
+      this.showToast('Web Speech API nu este disponibil în acest browser. Consideră Chrome/Edge.');
+    }
 
-// Datele camerei (criptate: nu sunt în clar în HTML public)
-const CAMERA_DATA = {
-  sn: '9K0EEAEPAZ8380F',
-  model: 'NVR / Cameră IP (Dahua/IMOU P2P)',
-  status: 'Online',
-  user: 'opium',
-  pass: 'opium94!',
-  channel: 'Entree 1 (Caméra)',
-  location: 'https://maps.app.goo.gl/azapHJWFIZPCjhmHA?g_st=aw'
+    // Text input handler
+    const sendBtn = document.getElementById('sendBtn');
+    const voiceInput = document.getElementById('voiceInput');
+    sendBtn.addEventListener('click', () => this.processText(voiceInput.value));
+    voiceInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') this.processText(voiceInput.value);
+    });
+
+    // Call button
+    document.getElementById('callButton').addEventListener('click', () => {
+      this.callAssistant();
+    });
+
+    // Control buttons
+    document.getElementById('btnNext').addEventListener('click', () => this.skip(5));
+    document.getElementById('btnPrev').addEventListener('click', () => this.skip(-5));
+    document.getElementById('btnPause').addEventListener('click', () => this.togglePause());
+    document.getElementById('btnStop').addEventListener('click', () => this.stop());
+
+    // Jump buttons (manual)
+    document.getElementById('jumpFwd').addEventListener('click', () => this.skip(5, true));
+    document.getElementById('jumpBack').addEventListener('click', () => this.skip(-5, true));
+
+    // Listen continuously
+    this.listenContinuously();
+  },
+
+  showToast(msg, isSystem = true) {
+    const history = document.getElementById('responseHistory');
+    const item = document.createElement('div');
+    item.className = 'item' + (isSystem ? ' system' : '');
+    item.textContent = msg;
+    history.appendChild(item);
+    history.scrollTop = history.scrollHeight;
+  },
+
+  callAssistant() {
+    const card = document.getElementById('assistantCard');
+    card.style.display = card.style.display === 'none' ? 'block' : 'none';
+    this.speak('Bună! Sunt Ilie. Spune-mi când dorești să vezi ce s-a întâmplat pe ecran.', false);
+  },
+
+  // Web Speech API listeners
+  setupSpeechListeners() {
+    this.recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      this.showToast('Au zis: ' + transcript, false);
+      this.processText(transcript);
+    };
+
+    this.recognition.onerror = (event) => {
+      console.warn('Speech recognition error:', event.error);
+      if (event.error === 'no-speech' || event.error === 'audio-capture') {
+        this.showToast('Nicio voce detectata. Mai incearca.');
+      }
+    };
+
+    this.recognition.onend = () => {
+      if (this.isListening) {
+        this.recognition.start();
+      }
+    };
+  },
+
+  listenContinuously() {
+    if (this.isListening) return;
+    if (this.recognition) {
+      try {
+        this.recognition.start();
+        this.isListening = true;
+        this.showToast('Asteptă comenzi ("Continuă", "Înapoi", "Oprește", "Ilie,..."...)');
+      } catch (e) {
+        console.warn('Failed to start recognition:', e);
+      }
+    }
+  },
+
+  stopListening() {
+    if (this.recognition) {
+      this.recognition.stop();
+      this.isListening = false;
+      this.showToast('Ascultare oprită.');
+    }
+  },
+
+  processText(text) {
+    const cmd = text.toLowerCase().trim();
+    const history = document.getElementById('responseHistory');
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.textContent = `Tu: ${text}`;
+    history.appendChild(item);
+    history.scrollTop = history.scrollHeight;
+
+    // Check for "Oprește" / "Stop"
+    if (cmd.includes('opreste') || cmd.includes('stop') || cmd.includes('iesire')) {
+      this.stopListening();
+      this.stopVideo();
+      this.showToast('Audio oprit. Ascultarea oprită.');
+      return;
+    }
+
+    // Check for "Pauză"
+    if (cmd.includes('pauza') || cmd.includes('pause')) {
+      if (this.currentVideo) {
+        this.currentVideo.pause();
+        this.showToast('Video oprit.');
+      }
+      return;
+    }
+
+    // Check for "Continuă" / "Înainte" / "Mai departe"
+    if (cmd.includes('continu') || cmd.includes('inaint') || cmd.includes('mai dep') || cmd.includes('trece')) {
+      this.skip(5);
+      return;
+    }
+
+    // Check for "Înapoi"
+    if (cmd.includes('inapoi') || cmd.includes('reven') || cmd.includes('indroit')) {
+      this.skip(-5);
+      return;
+    }
+
+    // Check for "Ilie" and camera commands
+    if (cmd.startsWith('ilie') || cmd.includes('pe camera') || cmd.includes('chiar pe camera') || cmd.includes('pe camera de')) {
+      this.handleCameraCommand(cmd);
+      return;
+    }
+
+    // Check for time-based commands
+    if (this.isTimeCommand(cmd)) {
+      this.handleTimeCommand(cmd);
+      return;
+    }
+
+    this.showToast('Nu am înțeles. Spune "Ilie, uită-te pe cameră la 2:00" sau "Continuă" / "Înapoi" / "Oprește".');
+  },
+
+  isTimeCommand(cmd) {
+    // Check for HH:MM format or time words
+    const timeRegex = /(\d{1,2}):(\d{2})/;
+    const hasTime = timeRegex.test(cmd);
+    const hasCameraWords = cmd.includes('cameră') || cmd.includes('camera') || cmd.includes('etaj') || cmd.includes('rdc') || cmd.includes('etaj 1') || cmd.includes('etaj 2');
+    return hasTime || hasCameraWords;
+  },
+
+  handleTimeCommand(cmd) {
+    let timeOffset = null;
+    const timeRegex = /(\d{1,2}):(\d{2})/;
+    const match = cmd.match(timeRegex);
+    if (match) {
+      const minutes = parseInt(match[1]);
+      const seconds = parseInt(match[2]);
+      timeOffset = minutes * 60 + seconds;
+    }
+
+    // Find camera keyword
+    const cameraMap = {
+      'rdc': 'video-rdc',
+      'rdc': 'video-rdc',
+      'etaj 1': 'video-e1',
+      'etaj1': 'video-e1',
+      'etaj 2': 'video-e2',
+      'etaj2': 'video-e2',
+      'etaj': 'video-e1',
+      'escc': 'video-rdc'
+    };
+
+    let videoId = null;
+    for (const [key, val] of Object.entries(cameraMap)) {
+      if (cmd.includes(key)) {
+        videoId = val;
+        break;
+      }
+    }
+
+    const video = document.getElementById(videoId);
+    if (!video) {
+      // Auto-detect first video
+      const videos = document.querySelectorAll('video');
+      if (videos.length > 0) video = videos[0];
+    }
+
+    if (!video) {
+      this.showToast('Niciun video gasit.')
+      return;
+    }
+
+    this.currentVideo = video;
+    this.currentVideoName = video.id;
+
+    if (timeOffset !== null) {
+      video.currentTime = Math.max(0, Math.min(video.duration, timeOffset));
+      this.showToast(`Lasă video la ora ${match[1]}:${match[2]} și începe ce se întâmplă.`);
+    } else {
+      this.showToast('Listează video și începe ce se întâmplă.');
+    }
+
+    // Start playing
+    video.play().catch(e => {
+      this.showToast('Nu am putut porni video: ' + e.message);
+    });
+
+    this.isPaused = false;
+    this.speak(`Video deschis. Tot ce faci e să vezi și să ascultați. Spune "Continuă" pentru +5s, sau "Oprește".`, false);
+  },
+
+  handleCameraCommand(cmd) {
+    // Map camera names to video elements
+    const cameraMap = {
+      'rdc': 'video-rdc',
+      'rdc': 'video-rdc',
+      'etaj 1': 'video-e1',
+      'etaj1': 'video-e1',
+      'etaj 2': 'video-e2',
+      'etaj2': 'video-e2',
+      'etaj': 'video-e1',
+      'escc': 'video-rdc'
+    };
+
+    let videoId = null;
+    for (const [key, val] of Object.entries(cameraMap)) {
+      if (cmd.includes(key)) {
+        videoId = val;
+        break;
+      }
+    }
+
+    const video = document.getElementById(videoId);
+    if (!video) {
+      // Auto-detect
+      const videos = document.querySelectorAll('video');
+      video = videos[0] || null;
+    }
+
+    if (!video) {
+      this.showToast('Niciun video gasit.');
+      return;
+    }
+
+    this.currentVideo = video;
+    this.currentVideoName = video.id;
+    const names = {
+      'video-rdc': 'Arcade RDC',
+      'video-e1': 'Arcade Etaj 1',
+      'video-e1': 'Arcade Etaj 1',
+      'video-e2': 'Arcade Etaj 2',
+      'video-c': 'Centre Ousswa'
+    };
+    const name = names[video.id] || 'Video';
+
+    this.showToast(`Deschideți ${name}, iată ce se întâmplă.`);
+    video.play().catch(e => this.showToast('Nu am putut porni video.'));
+    this.isPaused = false;
+  },
+
+  skip(seconds, manual = false) {
+    if (!this.currentVideo) {
+      this.showToast('Niciun video deschis. Apelează numele camerei sau await video.');
+      return;
+    }
+
+    const wasPlaying = !this.currentVideo.paused;
+    const newTime = Math.max(0, Math.min(this.currentVideo.duration, this.currentVideo.currentTime + seconds));
+    this.currentVideo.currentTime = newTime;
+    this.videoTime = newTime;
+
+    if (manual) {
+      this.showToast(`Jumătate de clipă. Timpul acumulat: ${this.formatTime(newTime)}`);
+    } else if (this.isPaused) {
+      this.currentVideo.play();
+      this.isPaused = false;
+      this.showToast(`Continuă la: ${this.formatTime(newTime)}`);
+    } else {
+      this.showToast(`Continuă la: ${this.formatTime(newTime)}`);
+    }
+
+    // Update time display if the video is one we control
+    const timeEl = document.getElementById(this.currentVideo.name + 'Time') || document.getElementById(this.currentVideo.name + 'TimeInput');
+    if (timeEl) {
+      timeEl.textContent = this.formatTime(newTime);
+    }
+  },
+
+  togglePause() {
+    if (!this.currentVideo) return;
+    if (this.currentVideo.paused) {
+      this.currentVideo.play();
+      this.isPaused = false;
+      this.showToast('Redare continuă.');
+    } else {
+      this.currentVideo.pause();
+      this.isPaused = true;
+      this.showToast('Video oprit.');
+    }
+  },
+
+  stop() {
+    if (!this.currentVideo) return;
+    this.stopListening();
+    this.currentVideo.pause();
+    this.currentVideo.currentTime = 0;
+    this.isPaused = true;
+    this.showToast('Video oprit și resetează. Ascultare oprită.');
+  },
+
+  stopVideo() {
+    if (this.currentVideo) {
+      this.currentVideo.pause();
+      this.currentVideo.currentTime = 0;
+      this.isPaused = true;
+    }
+  },
+
+  formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return '00:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  },
+
+  speak(text, isSystem = true) {
+    if ('speechSynthesis' in window && window.speechSynthesis) {
+      // Stop any current speech
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ro-RO';
+      utterance.rate = 0.95;
+      utterance.pitch = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+  }
 };
 
-let correctPIN = null;
-
-// Încarcă PIN-ul salvat anterior din localStorage
-function loadPIN(){
-  const saved = localStorage.getItem('parc_camera_pin');
-  if(saved) correctPIN = saved;
-}
-
-// Salvează PIN-ul în localStorage
-function savePIN(){
-  const pin = document.getElementById('pin-input').value;
-  if(pin) {
-    localStorage.setItem('parc_camera_pin', pin);
-    correctPIN = pin;
-  }
-}
-
-// Afișează fereastra PIN
-function showPIN(){
-  document.getElementById('pin-box').style.display = 'block';
-  document.getElementById('pin-input').focus();
-}
-
-// Ascunde fereastra PIN
-function hidePIN(){
-  document.getElementById('pin-box').style.display = 'none';
-  document.getElementById('pin-input').value = '';
-  document.getElementById('pin-error').style.display = 'none';
-  document.getElementById('cam-info').classList.remove('active');
-}
-
-// Trimite PIN-ul
-document.getElementById('pin-input').addEventListener('keydown', function(e){
-  if(e.key === 'Enter'){
-    document.getElementById('pin-submit').click();
-  }
+// Start the assistant when page loads
+window.addEventListener('DOMContentLoaded', () => {
+  assistant.init();
 });
 
-// Creăm butonul submit
-const submitBtn = document.createElement('button');
-submitBtn.id = 'pin-submit';
-submitBtn.className = 'btn btn-primary';
-submitBtn.style.cssText = 'margin-top:12px;';
-submitBtn.textContent = 'Autentificare';
-document.querySelector('.card-body').appendChild(submitBtn);
-
-// Când PIN-ul e corect, afișează datele camerei
-function onPinCorrect(){
-  document.getElementById('pin-error').style.display = 'none';
-  document.getElementById('cam-info').classList.add('active');
-  document.getElementById('pin-input').value = '';
-  document.getElementById('cam-sn').textContent = CAMERA_DATA.sn;
-  hidePIN();
-  showToast('Acces permis. Datele camerei sunt afișate.');
-}
-
-document.getElementById('pin-submit').addEventListener('click', function(){
-  const pin = document.getElementById('pin-input').value;
-  if(pin === correctPIN || correctPIN === null){
-    if(correctPIN === null){
-      if(pin === PIN_CODE){
-        savePIN();
-        onPinCorrect();
-      } else {
-        document.getElementById('pin-error').style.display = 'block';
-      }
-    } else {
-      onPinCorrect();
-    }
-  } else {
-    document.getElementById('pin-error').style.display = 'block';
-  }
-});
-
-// Buton: Copiază SN
-document.getElementById('copy-sn-btn').addEventListener('click', function(){
-  const sn = CAMERA_DATA.sn;
-  const tempInput = document.createElement('input');
-  tempInput.value = sn;
-  document.body.appendChild(tempInput);
-  tempInput.select();
-  document.execCommand('copy');
-  document.body.removeChild(tempInput);
-  showToast('Codul SN a fost copiat: ' + sn);
-});
-
-// Buton: Arată parola (afișează doar după autentificare)
-document.getElementById('show-pass-btn').addEventListener('click', function(){
-  const isAuthed = localStorage.getItem('parc_camera_pin') === correctPIN;
-  if(!isAuthed) {
-    showToast('Trebuie să fi autentificat pentru a vedea parola.');
-    return;
-  }
-  const pass = CAMERA_DATA.pass;
-  const modal = document.getElementById('pin-modal');
-  modal.style.display = 'flex';
-  modal.innerHTML = `
-    <div style="background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:center;max-width:400px;width:90%;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000">
-      <div style="font-size:22px;font-weight:750;padding:12px 0">${pass}</div>
-      <button class="btn btn-primary" id="close-pass" style="margin-top:12px">Închide</button>
-    </div>
-  `;
-  document.getElementById('close-pass').addEventListener('click', function(){
-    modal.innerHTML = '';
-    modal.style.display = 'none';
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
   });
 });
 
-// Toast notification helper
-function showToast(msg) {
-  const toast = document.createElement('div');
-  toast.textContent = msg;
-  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1B2A22;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:650;z-index:200;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:90vw;text-align:center;';
-  document.body.appendChild(toast);
-  requestAnimationFrame(() => requestAnimationFrame(() => toast.style.opacity = '1'));
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    setTimeout(() => document.body.removeChild(toast), 400);
-  }, 2500);
+// Initialize video objects for assistant use
+window.videoRDC = document.getElementById('video-rdc');
+window.videoE1 = document.getElementById('video-e1');
+window.videoE2 = document.getElementById('video-e2');
+window.videoC = document.getElementById('video-c');
+
+// Update time displays
+function updateTimeDisplays() {
+  const videos = [
+    { video: videoRDC, el: 'rdcTime', id: 'video-rdc' },
+    { video: videoE1, el: 'e1Time', id: 'video-e1' },
+    { video: videoE2, el: 'e2Time', id: 'video-e2' },
+    { video: videoC, el: 'cTime', id: 'video-c' }
+  ];
+  videos.forEach(v => {
+    if (v.video && v.el) {
+      const el = document.getElementById(v.el);
+      if (v.video.duration) {
+        el.textContent = assistant.formatTime(v.video.currentTime) + ' / ' + assistant.formatTime(v.video.duration);
+      } else {
+        el.textContent = '00:00 / --:--';
+      }
+    }
+  });
 }
 
-// Încarcă PIN-ul și verifică la încărcare
-loadPIN();
-document.getElementById('pin-input').focus();
+// Update time displays periodically
+setInterval(updateTimeDisplays, 1000);
+
+// Initial update
+updateTimeDisplays();
+
+// Stop listening when leaving the page
+window.addEventListener('beforeunload', () => {
+  if (assistant.recognition) {
+    assistant.recognition.stop();
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+});
 </script>
 </body>
 </html>
