@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1E4D3B">
+<meta name="description" content="Parc de la Saussaie — Camere de supraveghere și localizare pe hartă">
+<title>Supraveghere — Parcul de la Saussaie</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --green:#1E4D3B;
+  --green-2:#2A6B52;
+  --green-3:#3E8768;
+  --cream:#F7F4EC;
+  --cream-2:#EFEADB;
+  --paper:#FFFDF8;
+  --orange:#E8712A;
+  --orange-soft:#FDEBD9;
+  --red:#B93A2B;
+  --red-soft:#F9E1DD;
+  --amber:#B8860B;
+  --amber-soft:#FBF1D5;
+  --text:#1C2B24;
+  --muted:#6B7A71;
+  --border:#D8D2C2;
+  --white:#FFFFFF;
+  --radius:14px;
+  --shadow:0 2px 10px rgba(30,77,59,.08);
+  --nav-h:66px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--cream);color:var(--text);font-size:15px;line-height:1.45;
+  padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 16px);
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--green-2)}
+
+.app-header{
+  position:sticky;top:0;z-index:40;
+  background:linear-gradient(135deg,var(--green) 0%,#163C2E 100%);
+  color:var(--cream);padding:calc(10px + env(safe-area-inset-top,0px)) 14px 12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.18);
+}
+.header-row{display:flex;align-items:center;gap:12px;max-width:1100px;margin:0 auto}
+.brand-mark{width:42px;height:42px;flex:none;border-radius:11px;background:var(--orange);display:grid;place-items:center;color:#fff;font-weight:800;font-size:19px;letter-spacing:-1px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
+.brand-text{flex:1;min-width:0}
+.brand-text h1{margin:0;font-size:17px;font-weight:750;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-text p{margin:1px 0 0;font-size:11px;opacity:.75;letter-spacing:.7px;text-transform:uppercase}
+.header-actions{display:flex;gap:6px;flex:none}
+.hdr-btn{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:var(--cream);border-radius:9px;padding:8px 9px;font-size:11px;font-weight:650;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px}
+.hdr-btn:active{background:rgba(255,255,255,.2)}
+.hdr-btn svg{width:17px;height:17px}
+
+.container{max-width:1100px;margin:0 auto;padding:14px}
+
+.card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:12px}
+.card.flush{padding:0;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--cream-2)}
+.card-head h2,.card-head h3{margin:0;font-size:14px;font-weight:750;letter-spacing:.2px}
+.card-head .spacer{flex:1}
+.card-body{padding:14px}
+
+.section-title{display:flex;align-items:center;gap:9px;margin:20px 2px 10px;font-size:12px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--green)}
+.section-title:first-child{margin-top:4px}
+.section-title .bar{width:4px;height:16px;background:var(--orange);border-radius:2px}
+.section-title .count{margin-left:auto;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0;text-transform:none}
+
+.grid{display:grid;gap:10px}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.cam-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+.cam-card{
+  background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:14px;display:flex;flex-direction:column;
+}
+.cam-card .cam-head{display:flex;align-items:center;gap:10px}
+.cam-card .cam-icon{flex:none;width:44px;height:44px;border-radius:8px;background:var(--orange-soft);display:grid;place-items:center;color:var(--orange)}
+.cam-card .cam-info{flex:1;min-width:0}
+.cam-card .cam-name{font-weight:750;font-size:15px;color:var(--text)}
+.cam-card .cam-detail{font-size:12px;color:var(--muted);margin-top:2px}
+.cam-card .cam-status{display:flex;align-items:center;gap:6px;font-size:13px}
+.cam-card .cam-status .dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block}
+.cam-card .cam-status .dot.off{background:var(--red)}
+.cam-card .cam-json{padding:10px;background:var(--cream-2);border-radius:8px;font-size:12px;color:var(--muted);white-space:pre;overflow-x:auto;border:1px solid var(--border)}
+
+.map-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
+.map-card h3{font-size:14px;font-weight:750;letter-spacing:.2px;margin-bottom:8px}
+.map-card iframe{width:100%;height:350px;border:0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.map-card .map-meta{font-size:12px;color:var(--muted);margin-top:8px}
+
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--border);background:var(--paper);color:var(--text);padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+.btn:hover{background:var(--cream-2);border-color:var(--green)}
+.btn-primary{background:var(--green);color:var(--cream);border:none}
+.btn-primary:hover{background:var(--green-2)}
+.btn-sm{padding:6px 10px;font-size:12px}
+.btn-red{background:var(--red);color:var(--cream);border:none}
+.btn-red:hover{background:var(--red-soft)}
+
+.divider{height:1px;background:var(--border);margin:14px 0}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.field label{font-size:13px;font-weight:650;color:var(--muted)}
+.field input, .field textarea, .field select{font:inherit;color:inherit;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--paper);font-size:14px;outline:none}
+.field input:focus, .field textarea:focus, .field select:focus{border-color:var(--green)}
+
+.details-box{background:var(--cream-2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px}
+.details-box h3{font-size:13px;font-weight:750;letter-spacing:.2px;margin-bottom:8px;color:var(--green)}
+
+.hint{font-size:12px;color:var(--muted);margin:8px 0}
+.mono{background:var(--cream);border:1px solid var(--border);padding:2px 6px;border-radius:4px;font-size:12px;font-family:monospace}
+
+.nav{display:flex;gap:6px;padding:10px;background:var(--cream-2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30}
+.nav-inner{display:flex;gap:4px}
+.nav-tab{background:var(--cream);padding:10px 14px;border-radius:8px 8px 0 0;cursor:pointer;border:none;font-size:13px;font-weight:650;display:flex;align-items:center;gap:8px;flex:1;position:relative}
+.nav-tab.active{background:var(--green);color:var(--cream)}
+.nav-tab svg{width:18px;height:18px}
+.nav-tab.active svg{width:19px;height:19px}
+
+/* PIN modal */
+#pin-modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
+  z-index:500;align-items:center;justify-content:center;
+}
+#pin-modal.show{display:flex}
+.pin-card{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:24px;width:100%;max-width:400px}
+.pin-card h2{margin-bottom:16px;text-align:center}
+.pin-card input{
+  width:100%;padding:14px;border:1px solid var(--border);border-radius:8px;
+  font-size:20px;text-align:center;margin-bottom:12px;letter-spacing:2px;
+}
+.pin-card input:focus{outline:none;border-color:var(--green)}
+.pin-card .error{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.pin-card button{width:100%;padding:12px;background:var(--green);color:var(--cream);border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer}
+.pin-card button:hover{background:var(--green-2)}
+
+@media (max-width:760px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cam-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="header-row">
+    <div class="brand-mark">&#128274;</div>
+    <div class="brand-text">
+      <h1>Parcul de la Saussaie</h1>
+      <p>Supraveghere &ndash; Camere IP</p>
+    </div>
+    <div class="header-actions">
+      <a class="hdr-btn" href="https://maps.app.goo.gl/azapHJWFIZPCjhmHA?g_st=aw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Hartă localizare
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-tab active" data-tab="cameras">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-3v10l-6-3z"/></svg>
+      <span>Camere</span>
+    </button>
+    <button class="nav-tab" data-tab="map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 3 22 3 22 21 1 21z" fill="#1E4D3B" stroke="none"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg>
+      <span>Hartă localizare</span>
+    </button>
+  </div>
+</nav>
+
+<main class="container">
+  <section class="tab-panel active" id="tab-cameras">
+    <div class="card">
+      <div class="card-body">
+        <div class="btn-row">
+          <button class="btn btn-primary" id="open-pin-btn">&#128273; Acces Camere</button>
+        </div>
+        <p class="hint" style="margin:9px 0 0">Supraveghere IP (Dahua/IMOU P2P). Acces cu cod PIN.</p>
+      </div>
+    </div>
+
+    <div class="section-title"><span class="bar"></span>&#128273; Camere de Supraveghere</div>
+    <div class="card">
+      <div class="card-body">
+        <div class="grid grid-3" id="cam-list">
+          <div class="card flush">
+            <div class="card-head"><h3>Cam&#259;ra 1</h3><span class="spacer"></span><span class="cam-status"><span class="dot"></span>Online</span></div>
+            <div class="card-body">
+              <p><strong>SN:</strong> <span class="mono" data-sn>9K0EEAEPAZ8380F</span></p>
+              <p><strong>Canal:</strong> Entree 1</p>
+              <p><strong>Status:</strong> &#128293; Online</p>
+            </div>
+          </div>
+          <div class="card flush">
+            <div class="card-head"><h3>Cam&#259;ra 2</h3><span class="spacer"></span><span class="cam-status"><span class="dot"></span>Online</span></div>
+            <div class="card-body">
+              <p><strong>Canal:</strong> Entree 2</p>
+              <p><strong>Status:</strong> &#128293; Online</p>
+            </div>
+          </div>
+          <div class="card flush">
+            <div class="card-head"><h3>Cam&#259;ra 3</h3><span class="spacer"></span><span class="cam-status"><span class="dot"></span>Online</span></div>
+            <div class="card-body">
+              <p><strong>Canal:</strong> Acceuil</p>
+              <p><strong>Status:</strong> &#128293; Online</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-map">
+    <div class="card map-card">
+      <div class="card-body">
+        <h3>&#127968; Hart&#259; Parcul de la Saussaie</h3>
+        <iframe
+          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCW4WUUBpyk6vEXrZc0q-6W69I8ikq3wLk&q=Parcul+de+la+Saussaie,+France"
+          width="100%" height="500" frameborder="0" style="border:0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)"
+          allowfullscreen loading="lazy"></iframe>
+        <p class="map-meta">&#127968; <strong>Parcul de la Saussaie</strong> &mdash; Sosea, Fran&#355;a.</p>
+        <a href="https://maps.app.goo.gl/azapHJWFIZPCjhmHA?g_st=aw" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:12px">Deschide pe Google Maps &#8594;</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="pin-modal">
+  <div class="pin-card">
+    <h2>&#128273; Autentificare Camere</h2>
+    <input type="password" id="pin-input" maxlength="4" placeholder="&#9679;&#9679;&#9679;&#9679;" autocomplete="off">
+    <div id="pin-error" class="error">Cod incorect.</div>
+    <button id="pin-submit">Acceseaz&#259;</button>
+  </div>
+</div>
+
+<script>
+// PIN code for camera access
+const PIN_CODE = '1234';
+
+// Store camera data (without sensitive info in public HTML)
+const CAMERA_DATA = {
+  sn: null, // filled after PIN verification
+  model: 'NVR / IP Camera (Dahua/IMOU P2P)',
+  status: 'Online',
+  channels: [
+    {id:1, name:'Entree 1', type:'entree', status:'online', floor:'Parter'},
+    {id:2, name:'Entree 2', type:'entree', status:'online', floor:'Parter'},
+    {id:3, name:'Acceuil', type:'main', status:'online', floor:'Parter'}
+  ]
+};
+
+let correctPIN = null;
+
+// Load PIN from localStorage if exists
+function loadPIN(){
+  const saved = localStorage.getItem('cameras_pin');
+  if(saved) correctPIN = saved;
+}
+
+// Save PIN to localStorage
+function savePIN(p){
+  localStorage.setItem('cameras_pin', p);
+  correctPIN = p;
+}
+
+// Show PIN modal
+function showPIN(){
+  document.getElementById('pin-modal').classList.add('show');
+}
+
+// Hide PIN modal
+function hidePIN(){
+  document.getElementById('pin-modal').classList.remove('show');
+}
+
+// Submit PIN
+document.getElementById('pin-submit').addEventListener('click', function(){
+  const pin = document.getElementById('pin-input').value;
+  if(pin === correctPIN || correctPIN === null){
+    if(correctPIN === null){
+      // First time, ask for PIN and save it
+      if(pin === PIN_CODE){
+        savePIN(pin);
+        hidePIN();
+        showMessage('Autentificare re&#259;u&#355;it&#259;. Acces permis.');
+      } else {
+        showError('Cod incorect.');
+      }
+    } else {
+      hidePIN();
+      loadCameras();
+    }
+  } else {
+    showError('Cod incorect.');
+  }
+});
+
+function showError(msg){
+  const el = document.getElementById('pin-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function showMessage(msg){
+  const el = document.getElementById('pin-error');
+  el.textContent = msg;
+  el.style.color = 'var(--green)';
+  el.style.display = 'block';
+}
+
+// Load cameras after PIN
+function loadCameras(){
+  const grid = document.getElementById('cam-list');
+  const cameras = CAMERA_DATA.channels;
+  grid.innerHTML = cameras.map(c=>{
+    return `
+      <div class="card flush">
+        <div class="card-head"><h3>Camer&#259; ${c.id}</h3><span class="spacer"></span><span class="cam-status"><span class="dot"></span>${c.status}</span></div>
+        <div class="card-body">
+          <p><strong>Canal:</strong> ${c.name}</p>
+          <p><strong>Sufa:</strong> ${c.floor}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  // Load camera details
+  const sn = document.querySelectorAll('[data-sn]');
+  if(sn.length > 0 && correctPIN){
+    sn[0].textContent = CAMERA_DATA.sn || 'N/A';
+  }
+  
+  hidePIN();
+}
+
+document.getElementById('open-pin-btn').addEventListener('click', showPIN);
+document.getElementById('pin-input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){
+    document.getElementById('pin-submit').click();
+  }
+});
+
+// Load cameras on page load
+loadPIN();
+loadCameras();
+</script>
+</body>
+</html>
