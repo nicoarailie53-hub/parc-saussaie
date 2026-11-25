@@ -1228,6 +1228,104 @@ input[readonly]{background:var(--cream-2);color:var(--muted)}
   </div>
 </div>
 
+
+<!--
+  CAMERA CONFIGURATION - Parc de la Saussaie
+  7 cameras (5 working, 2 broken): CH1-CH7 (DMSS Dahua)
+-->
+<script>
+const CAMERA_CONFIG = {
+  ch1: {name:'CH1', url:'http://192.168.1.64:8080/cam1.jpg', type:'dmss-dahua', status:'working', notes:'Zone A - Parter'},
+  ch2: {name:'CH2', url:'http://192.168.1.64:8080/cam2.jpg', type:'dmss-dahua', status:'working', notes:'Zone A - Parter'},
+  ch3: {name:'CH3', url:'http://192.168.1.64:8080/cam3.jpg', type:'dmss-dahua', status:'working', notes:'Zone A - Parter'},
+  ch4: {name:'CH4', url:'http://192.168.1.65:8080/cam1.jpg', type:'dmss-dahua', status:'broken', notes:'Zone A - Parter - offline'},
+  ch5: {name:'CH5', url:'http://192.168.1.65:8080/cam3.jpg', type:'dmss-dahua', status:'working', notes:'Zone A - Parter'},
+  ch6: {name:'CH6', url:'http://192.168.1.65:8080/cam2.jpg', type:'dmss-dahua', status:'working', notes:'Zone A - Parter'},
+  ch7: {name:'CH7', url:'http://192.168.1.66:8080/cam1.jpg', type:'dmss-dahua', status:'working', notes:'Zone A - Parter'}
+};
+
+const CAMERA_LIST = [
+  {id:'ch1', name:'CH1', zone:'Parter', floor:'Parter', status:'online', ip:'192.168.1.64', port:8080, type:'dmss'},
+  {id:'ch2', name:'CH2', zone:'Parter', floor:'Parter', status:'online', ip:'192.168.1.64', port:8080, type:'dmss'},
+  {id:'ch3', name:'CH3', zone:'Parter', floor:'Parter', status:'online', ip:'192.168.1.64', port:8080, type:'dmss'},
+  {id:'ch4', name:'CH4', zone:'Parter', floor:'Parter', status:'offline', ip:'192.168.1.65', port:8080, type:'dmss'},
+  {id:'ch5', name:'CH5', zone:'Parter', floor:'Parter', status:'online', ip:'192.168.1.65', port:8080, type:'dmss'},
+  {id:'ch6', name:'CH6', zone:'Parter', floor:'Parter', status:'online', ip:'192.168.1.65', port:8080, type:'dmss'},
+  {id:'ch7', name:'CH7', zone:'Parter', floor:'Parter', status:'online', ip:'192.168.1.66', port:8080, type:'dmss'}
+];
+
+const PIN_STORAGE_KEY = 'parc_camera_pin';
+
+function showCameraPIN(){
+  const modal = document.getElementById('camera-pin-modal');
+  if(modal) modal.style.display = 'flex';
+  else {
+    const div = document.createElement('div');
+    div.id = 'camera-pin-modal';
+    div.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;align-items:center;justify-content:center;';
+    div.innerHTML = '
+      <div style="background:#1E4D3B;border-radius:16px;padding:24px;text-align:center;max-width:400px;width:90%;">
+        <h2 style="margin:0 0 12px;font-size:20px;color:#fff;">&#128273; Acces Camere</h2>
+        <input type="password" id="cam-pin-input" maxlength="4" placeholder="●●●●" style="width:100%;padding:14px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;font-size:20px;margin-bottom:12px;outline:none;">
+        <div id="cam-pin-error" style="color:#F9E1DD;margin-bottom:12px;display:none;font-size:13px;">Cod incorect.</div>
+        <button id="cam-pin-submit" style="padding:12px 24px;border-radius:8px;background:#E8712A;color:#fff;font-weight:700;border:none;cursor:pointer;">Acceseaz&#259;</button>
+      </div>
+    ';
+    document.body.appendChild(div);
+    document.getElementById('cam-pin-submit').addEventListener('click', submitCamPin);
+    document.getElementById('cam-pin-input').addEventListener('keydown', e=>{if(e.key==='Enter')submitCamPin();});
+  }
+}
+
+function submitCamPin(){
+  const pin = document.getElementById('cam-pin-input').value;
+  const saved = localStorage.getItem(PIN_STORAGE_KEY);
+  if(saved && saved !== pin){
+    document.getElementById('cam-pin-error').style.display = 'block';
+    return;
+  }
+  localStorage.setItem(PIN_STORAGE_KEY, pin);
+  const modal = document.getElementById('camera-pin-modal');
+  if(modal) modal.style.display = 'none';
+  document.getElementById('cam-pin-error').style.display = 'none';
+  loadCameraList();
+}
+
+function loadCameraList(){
+  const grid = document.getElementById('cam-grid');
+  if(!grid) return;
+  grid.innerHTML = CAMERA_LIST.map(c=>`
+    <div class="cam-card flush">
+      <div class="cam-head">
+        <span class="cam-dot" style="background:${c.status==='online'?'var(--green)':'var(--red)'};"></span>
+        <h3>${c.name}</h3>
+        <span class="spacer"></span>
+        <span class="cam-status"><span class="dot"></span>${c.status==='online'?'Online':'Offline'}</span>
+      </div>
+      <div class="cam-body">
+        <p class="mono" style="font-size:11px;">${c.ip}:${c.port}</p>
+        <p class="hint" style="font-size:11px;">Zone: ${c.zone}</p>
+        <div class="btn-row" style="margin-top:8px;">
+          <button class="btn btn-sm btn-orange" onclick="openCameraStream('${c.id}')">&#127916; Deschide stream</button>
+          <button class="btn btn-sm btn-ghost" onclick="toggleCamStatus('${c.id}')">&#9632; ${c.status==='online'?'Offline':'Online'}</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openCameraStream(cid){
+  showCameraPIN();
+}
+
+function toggleCamStatus(cid){
+  const cam = CAMERA_LIST.find(c=>c.id===cid);
+  if(!cam) return;
+  cam.status = cam.status === 'online' ? 'offline' : 'online';
+  const dot = document.querySelector(`.cam-card [data-cam-id="${cid}"] .dot`);
+  if(dot) dot.style.background = cam.status === 'online' ? 'var(--green)' : 'var(--red)';
+}
+</script>
 <script>
 // ===== Voice Assistant Ilie =====
 const assistant = {

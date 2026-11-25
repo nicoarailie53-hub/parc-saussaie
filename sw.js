@@ -1,7 +1,7 @@
 // Service Worker for Parc de la Saussaie PWA
 // Caches static assets for offline access
 
-const CACHE_NAME = 'parc-saussaie-v3';
+const CACHE_NAME = 'parc-saussaie-v14';
 
 // Static assets to cache
 const STATIC_ASSETS = [
